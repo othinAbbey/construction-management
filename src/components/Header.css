@@ -1,0 +1,30 @@
+header {
+  background-color: #898686;
+  color: #ffffff;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+}
+header h3 {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  height: auto;
+}
+
+span {
+  display: block;
+}
+.blue {
+  background-color: rgb(19, 12, 218);
+  height: 5px;
+}
+.yellow {
+  background-color: yellow;
+  height: 5px;
+}
+.red {
+  background-color: red;
+  height: 5px;
+}

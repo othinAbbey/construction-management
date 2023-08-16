@@ -1,0 +1,24 @@
+/* Sidebar.module.css */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ed1414;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.link {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+}
+
+.link:hover {
+  background-color: #555;
+}
