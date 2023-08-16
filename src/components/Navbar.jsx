@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   createStyles,
   Navbar,
@@ -142,9 +143,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const mainLinksMockdata = [
+const mainMenuIcons = [
   { icon: IconHome2, label: "Home" },
-  { icon: IconGauge, label: "Dashboard" },
+  { icon: IconGauge, label: "Site" },
   { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
   { icon: IconCalendarStats, label: "Releases" },
   { icon: IconUser, label: "Account" },
@@ -152,7 +153,7 @@ const mainLinksMockdata = [
   { icon: IconSettings, label: "Settings" },
 ];
 
-const linksMockdata = [
+const mainMenuData = [
   "Security",
   "Settings",
   "Dashboard",
@@ -171,7 +172,7 @@ function DoubleNavbar() {
   const [active, setActive] = useState("Releases");
   const [activeLink, setActiveLink] = useState("Settings");
 
-  const mainLinks = mainLinksMockdata.map((link) => (
+  const mainLinks = mainMenuIcons.map((link) => (
     <Tooltip
       label={link.label}
       position="right"
@@ -190,7 +191,7 @@ function DoubleNavbar() {
     </Tooltip>
   ));
 
-  const links = linksMockdata.map((link) => (
+  const links = mainMenuData.map((link) => (
     <a
       className={cx(classes.link, {
         [classes.linkActive]: activeLink === link,
@@ -215,13 +216,13 @@ function DoubleNavbar() {
           </div>
           {mainLinks}
         </div>
-        <div className={classes.main}>
-          <Title order={4} className={classes.title}>
+        {/* <div className={classes.main}>
+          <Title order={2} className={classes.title}>
             {active}
           </Title>
 
           {links}
-        </div>
+        </div> */}
       </Navbar.Section>
     </Navbar>
   );

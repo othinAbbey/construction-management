@@ -1,11 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./components/Home.jsx";
+import Navbar from "./components/Navbar.jsx";
 import "./index.css";
-import DoubleNavbar from "./componenets/Navbar.jsx";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navbar />,
+  },
+  {
+    path: "/Navigation",
+    element: <Home />,
+  },
+]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <DoubleNavbar />
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
