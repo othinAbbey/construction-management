@@ -5,7 +5,6 @@ import Footer from "./components/Footer";
 import Home from "./components/Home";
 import LandingPage from "./components/LandingPage.jsx";
 import Sidebar from "./components/SideBar.jsx";
-
 const App = () => {
   return (
     <Router>
