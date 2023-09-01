@@ -1,9 +1,11 @@
 /* Sidebar.module.css */
 .sidebar {
-  width: 20%;
+  width: 150px;
   height: 100%;
   background-color: grey;
   position: relative;
+  border-radius: 20px;
+  margin-left: 10px;
 }
 
 .link {
