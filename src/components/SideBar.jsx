@@ -8,14 +8,17 @@ const Sidebar = () => {
       <Link to="/" className="link">
         Home
       </Link>
+      <Link to="/Materials" className="link">
+        Materials
+      </Link>
+      <Link to="/projects" className="link">
+        Projects
+      </Link>
+      <Link to="/contactus" className="link">
+        Contact us
+      </Link>
       <Link to="/about" className="link">
         About
-      </Link>
-      <Link to="/services" className="link">
-        Services
-      </Link>
-      <Link to="/contact" className="link">
-        Contact
       </Link>
     </div>
   );
