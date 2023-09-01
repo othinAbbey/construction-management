@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import LandingPage from "./components/LandingPage.jsx";
 import Sidebar from "./components/SideBar.jsx";
 import Content from "./components/content.jsx";
+import Adverts from "./components/adverts.jsx";
 import "./App.css";
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <div className="mainDivs">
           <Sidebar />
           <Content />
+          <Adverts />
 
           {/* <div className="mainBody"></div> */}
         </div>

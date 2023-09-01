@@ -1,6 +1,9 @@
-* {
+.content {
   background-color: black;
   position: relative;
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: auto;
+  margin: 10px;
+  border-radius: 10px;
+  color: white;
 }

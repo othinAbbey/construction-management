@@ -1,7 +1,9 @@
+import "./Content.css";
+
 function Content() {
   return (
     <div className="content">
-      <h1>Content</h1>
+      <h6>This Site is Under Construction</h6>
     </div>
   );
 }

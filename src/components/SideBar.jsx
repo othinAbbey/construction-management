@@ -20,6 +20,9 @@ const Sidebar = () => {
       <Link to="/about" className="link">
         About
       </Link>
+      <Link to="/Tasks" className="link">
+        Tasks
+      </Link>
     </div>
   );
 };
