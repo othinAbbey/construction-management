@@ -3,9 +3,9 @@ import "../components/Header.css";
 function Header() {
   return (
     <header>
-      <h1>Contractor Managment</h1>
+      <h1>Site Simplify</h1>
       <h3>
-        <em>Easing Construction Mangement</em>
+        <em>Easing Construction Management</em>
       </h3>
 
       <div className="flag">

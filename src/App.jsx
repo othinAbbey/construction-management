@@ -7,12 +7,15 @@ import LandingPage from "./components/LandingPage.jsx";
 import Sidebar from "./components/SideBar.jsx";
 import Content from "./components/content.jsx";
 import Adverts from "./components/adverts.jsx";
+import Materials from "./components/Materials.jsx";
+import Time from "./components/Time.jsx";
 import "./App.css";
 const App = () => {
   return (
     <Router>
       <div>
         <Header />
+        <Time />
         <div className="mainDivs">
           <Sidebar />
           <Content />
