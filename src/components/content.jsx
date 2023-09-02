@@ -8,6 +8,7 @@ function Content() {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/Materials" element={<Materials />} />
       </Routes>
     </div>
