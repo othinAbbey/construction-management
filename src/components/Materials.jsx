@@ -9,25 +9,25 @@ function Materials() {
     {
       Size: "Item 1",
       imageSrc: "item1.jpg",
-      itemType: "Item 2",
+      itemType: "Item 1",
       quantity: <input type="number" placeholder="Quantity" />,
     },
     {
       Size: "Item 2",
       imageSrc: "item2.jpg",
-      itemType: "Item 3",
+      itemType: "Item 2",
       quantity: <input type="number" placeholder="Quantity" />,
     },
     {
       Size: "Item 3",
       imageSrc: "item3.jpg",
-      itemType: "Item 4",
+      itemType: "Item 3",
       quantity: <input type="number" placeholder="Quantity" />,
     },
     {
       Size: "Item 4",
       imageSrc: "item4.jpg",
-      itemType: "Item 5",
+      itemType: "Item 4",
       quantity: <input type="number" placeholder="Quantity" />,
     },
   ];
