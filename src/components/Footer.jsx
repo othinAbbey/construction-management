@@ -6,12 +6,9 @@ function Footer() {
   return (
     <footer>
       <h6>
-        {" "}
-        <em> C & A Contractors @2023 </em>{" "}
+        <em>Site Simplify @ C & A Contractors &copy; 2023 </em>
       </h6>
-      <h6>
-        <em>Site Simplify</em>
-      </h6>
+      <h6></h6>
     </footer>
   );
 }

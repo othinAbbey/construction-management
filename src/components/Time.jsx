@@ -1,3 +1,5 @@
+import "./Time.css";
+import { useClickOutside } from "@mantine/hooks";
 function Time() {
   let heading1 = document.getElementById("heading1");
 
@@ -11,6 +13,12 @@ function Time() {
   setTimeout(Time, 1000);
   let date = `${day} / ${month} / ${year} , ${hour}:${mins}:${secs}`;
   //   heading1.textContent = date;
+
+  return (
+    <div>
+      <h2 id="heading1">{date}</h2>
+    </div>
+  );
 }
 Time();
 
