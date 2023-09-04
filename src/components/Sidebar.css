@@ -1,12 +1,12 @@
 /* Sidebar.module.css */
 .sidebar {
   width: 150px;
-  height: auto;
+  height: 100vh;
   /* background-color: grey; */
   position: relative;
   border-radius: 10px;
   margin: 10px;
-  margin-right: 0px;
+  /* margin-right: 0px; */
   background-image: url("../assets/Image/plant.jpg");
   background-size: cover;
   background-repeat: no-repeat;
