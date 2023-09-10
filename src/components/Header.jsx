@@ -1,5 +1,5 @@
 import React from "react";
-import "./main.css";
+// import "./main.css";
 function Header() {
   return (
     <header className="bg-green-800 text-white text-center h-auto sm: mx-auto">

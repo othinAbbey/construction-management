@@ -19,15 +19,15 @@ const Sidebar = () => {
     { name: "Gallery", path: "/Gallery" },
   ];
   return (
-    <div className="relative text-blue-500 bg-gray-800 bg-opacity-500 w-full sm:w-1/3 rounded-lg overflow-hidden mx-aut">
+    <div className="relative w-full sm:w-1/5 rounded-lg overflow-hidden mx-aut">
       <button onClick={toggleMenu} className=" lg:hidden">
         {" "}
         Menu
       </button>
       <div
-        className={`sidebar ${
+        className={`sidebar  ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
-        } text-blue-500 bg-gray-800 bg-opacity-500 w-36 h-full rounded-lg   `}
+        } text-blue-500 bg-gray-800 bg-opacity-500  h-full rounded-lg   `}
       >
         {/* <div className={`sidebar ${menuOpen ? "open" : " "}`}> */}
         <ul className="sidebar-links">
