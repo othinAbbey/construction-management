@@ -6,7 +6,7 @@ import Materials from "./Materials";
 
 function Content() {
   return (
-    <div className="w-4/6 px-4 py-0">
+    <div className="w-full px-4 py-0 sm:w-auto mx-auto">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Materials" element={<Materials />} />

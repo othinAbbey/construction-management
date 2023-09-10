@@ -19,7 +19,7 @@ const Sidebar = () => {
     { name: "Gallery", path: "/Gallery" },
   ];
   return (
-    <div className="display">
+    <div className="relative text-blue-500 bg-gray-800 bg-opacity-500 w-full sm:w-1/3 rounded-lg overflow-hidden mx-aut">
       <button onClick={toggleMenu} className=" lg:hidden">
         {" "}
         Menu

@@ -13,18 +13,20 @@ import Content from "./components/content.jsx";
 // import "./App.css";
 const App = () => {
   return (
-    <Router className="h-100vh">
-      <div>
-        <Header />
-        <Time />
-        <div className="display flex flex-col sm:flex-row  ">
-          <Sidebar />
-          <Content />
-          <Adverts />
+    <div className="h-100vh max-sm:flex flex-col jjustify-items-center  ">
+      <Router>
+        <div>
+          <Header />
+          <Time />
+          <div className="display flex flex-col sm:flex-row  ">
+            <Sidebar />
+            <Content />
+            <Adverts />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 };
 

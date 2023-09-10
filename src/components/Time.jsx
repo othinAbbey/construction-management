@@ -1,4 +1,3 @@
-import "./Time.css";
 function Time() {
   let heading1 = document.getElementById("heading1");
 
@@ -14,7 +13,7 @@ function Time() {
   //   heading1.textContent = date;
 
   return (
-    <div>
+    <div className="sm:mx-auto">
       <h2 id="heading1">{date}</h2>
     </div>
   );
