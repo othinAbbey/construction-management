@@ -1,5 +1,4 @@
 import "./Time.css";
-import { useClickOutside } from "@mantine/hooks";
 function Time() {
   let heading1 = document.getElementById("heading1");
 

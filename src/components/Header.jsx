@@ -1,16 +1,12 @@
-import "../components/Header.css";
-
+import React from "react";
+import "./main.css";
 function Header() {
   return (
     <header>
-      <h1>Site Simplify</h1>
+      <h1 className="text-black">Site Simplify</h1>
       <h3>
-        <em>Easing Construction Management</em>
+        <em className="text-black">Easing Construction Management</em>
       </h3>
-
-      <div className="flag">
-        <span className="blue"></span>
-      </div>
     </header>
   );
 }

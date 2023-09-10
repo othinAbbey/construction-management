@@ -1,4 +1,8 @@
-header {
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* header {
   background-color: #898686;
   color: #ffffff;
   text-align: center;
@@ -28,4 +32,4 @@ span {
 .red {
   background-color: red;
   height: 5px;
-}
+} */

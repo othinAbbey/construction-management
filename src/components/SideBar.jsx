@@ -20,11 +20,16 @@ const Sidebar = () => {
   ];
   return (
     <div>
-      <button className="menu-btn" onClick={toggleMenu}>
+      <button onClick={toggleMenu} className="lg:hidden">
         {" "}
         Menu
       </button>
-      <div className={`sidebar ${menuOpen ? "open" : " "}`}>
+      <div
+        className={`sidebar ${
+          menuOpen ? "translate-x-0" : "-translate-x-full"
+        } relative text-blue-500 bg-gray-800 bg-opacity-500 w-5/7 h-full rounded-lg  overflow-hidden ml-auto mr-0`}
+      >
+        {/* <div className={`sidebar ${menuOpen ? "open" : " "}`}> */}
         <ul className="sidebar-links">
           {links.map((link) => (
             <li key={link.name}>

@@ -43,7 +43,7 @@ footer {
   align-items: left;
   justify-content: center;
   text-align: left;
-  position: relative;
+  position: fixed;
   bottom: 0%;
   margin-bottom: 5px;
 }

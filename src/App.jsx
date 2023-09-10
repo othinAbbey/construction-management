@@ -17,21 +17,10 @@ const App = () => {
       <div>
         <Header />
         <Time />
-        <div className="mainDivs">
+        <div className="mainBody">
           <Sidebar />
-          <Content />
           <Adverts />
-
-          {/* <div className="mainBody"></div> */}
         </div>
-        <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/Materials" element={<Materials />} /> */}
-          {/* <Route path="/Projects" element={<Project />} /> */}
-          {/* <Route path="/About" element={<About />} /> */}
-          {/* <Route path="/contactus" element={<Contactus />} /> */}
-          Other routes
-        </Routes>
         <Footer />
       </div>
     </Router>

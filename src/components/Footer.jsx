@@ -1,7 +1,5 @@
 import "../components/Footer.css";
 
-import { useClickOutside } from "@mantine/hooks";
-
 function Footer() {
   return (
     <footer>
