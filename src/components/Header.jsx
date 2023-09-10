@@ -2,10 +2,10 @@ import React from "react";
 import "./main.css";
 function Header() {
   return (
-    <header>
-      <h1 className="text-black">Site Simplify</h1>
+    <header className="bg-green-800 text-white text-center h-auto ">
+      <h1>Site Simplify</h1>
       <h3>
-        <em className="text-black">Easing Construction Management</em>
+        <em>Easing Construction Management</em>
       </h3>
     </header>
   );

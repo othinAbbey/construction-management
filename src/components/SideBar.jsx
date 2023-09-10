@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Sidebar.css"; // Import CSS module for styling
+// import "./Sidebar.css"; // Import CSS module for styling
 
 const Sidebar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -19,15 +19,15 @@ const Sidebar = () => {
     { name: "Gallery", path: "/Gallery" },
   ];
   return (
-    <div>
-      <button onClick={toggleMenu} className="lg:hidden">
+    <div className="display">
+      <button onClick={toggleMenu} className=" lg:hidden">
         {" "}
         Menu
       </button>
       <div
         className={`sidebar ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
-        } relative text-blue-500 bg-gray-800 bg-opacity-500 w-5/7 h-full rounded-lg  overflow-hidden ml-auto mr-0`}
+        } text-blue-500 bg-gray-800 bg-opacity-500 w-36 h-full rounded-lg   `}
       >
         {/* <div className={`sidebar ${menuOpen ? "open" : " "}`}> */}
         <ul className="sidebar-links">

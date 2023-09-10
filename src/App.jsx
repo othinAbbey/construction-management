@@ -10,15 +10,16 @@ import Adverts from "./components/adverts.jsx";
 import Sidebar from "./components/SideBar.jsx";
 import Content from "./components/content.jsx";
 
-import "./App.css";
+// import "./App.css";
 const App = () => {
   return (
-    <Router>
+    <Router className="h-100vh">
       <div>
         <Header />
         <Time />
-        <div className="mainBody">
+        <div className="display flex flex-col sm:flex-row  ">
           <Sidebar />
+          <Content />
           <Adverts />
         </div>
         <Footer />
