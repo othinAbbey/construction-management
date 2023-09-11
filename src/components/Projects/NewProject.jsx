@@ -10,6 +10,7 @@ function NewProjects() {
     // Add more input fields here
   });
 
+  const [selectedScopesOfWork, setSelectedScopesOfWork] = useState([]);
   const [total, setTotal] = useState(0);
 
   // Function to handle changes in the selected scope of work
@@ -41,6 +42,12 @@ function NewProjects() {
     calculateTotal(); // Calculate the total when the form is submitted
   };
 
+  // Function to add a selected scope of work to the list
+  const addScopeOfWork = () => {
+    setSelectedScopesOfWork([...selectedScopesOfWork, formData.scopeOfWork]);
+    setFormData({ ...formData, scopeOfWork: "" });
+  };
+
   return (
     <div>
       <label htmlFor="projectName">Project Name:</label>
@@ -59,10 +66,10 @@ function NewProjects() {
         type="datetime-local"
         placeholder="Date Of Completion"
       />
-      <h3>Scope of Works</h3>
+      <h1 className="text-xl font-bold">Works Section</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="scopeOfWork">Scope of Works:</label>
+          <label htmlFor="scopeOfWork">Works:</label>
           <select
             id="scopeOfWork"
             name="scopeOfWork"
@@ -77,61 +84,88 @@ function NewProjects() {
             <option value="Concrete">Concrete</option>
             {/* ... options ... */}
           </select>
+
+          <button type="button" onClick={addScopeOfWork}>
+            Add Scope of Work
+          </button>
         </div>
 
-        {/* Render input fields based on scopeOfWork */}
-        {formData.scopeOfWork === "excavation" && (
+        {selectedScopesOfWork.length > 0 && (
           <div>
-            <label htmlFor="length">Length:</label>
-            <input
-              type="text"
-              id="length"
-              name="length"
-              placeholder="Length"
-              value={formData.length}
-              onChange={handleScopeOfWorkChange}
-            />
-            <label htmlFor="width">Width:</label>
-            <input
-              type="text"
-              id="width"
-              name="width"
-              placeholder="Width"
-              value={formData.width}
-              onChange={handleScopeOfWorkChange}
-            />
-            <label htmlFor="depth">Depth:</label>
-            <input
-              type="text"
-              id="depth"
-              name="depth"
-              placeholder="Depth"
-              value={formData.depth}
-              onChange={handleScopeOfWorkChange}
-            />
+            <h2 className=" text-lg font-bold">Scope of Work:</h2>
+            <ul>
+              {selectedScopesOfWork.map((scope, index) => (
+                <li key={index}>{scope}</li>
+              ))}
+            </ul>
           </div>
         )}
-
-        {["brickwork", "blockwork"].includes(formData.scopeOfWork) && (
-          <div>
-            <label htmlFor="wallThickness">Wall Thickness:</label>
-            <input
-              type="text"
-              id="wallThickness"
-              name="wallThickness"
-              placeholder="Wall Thickness"
-              value={formData.wallThickness}
-              onChange={handleScopeOfWorkChange}
-            />
-            {/* Add more input fields for Brick Work or Block Work if needed */}
-          </div>
-        )}
-
-        {/* Add more conditionally rendered sections for other scope of works */}
-        {/* ... */}
-
-        <button type="submit">Calculate Total</button>
       </form>
+
+      {selectedScopesOfWork.map((selectedScope, index) => (
+        <form key={index} onSubmit={handleSubmit}>
+          {/* Render input fields based on selectedScope */}
+          {selectedScope === "excavation" && (
+            <div>
+              <label htmlFor="length">Length:</label>
+              <input
+                type="text"
+                id="length"
+                name="length"
+                placeholder="Length"
+                value={formData.length}
+                onChange={handleScopeOfWorkChange}
+              />
+              <label htmlFor="width">Width:</label>
+              <input
+                type="text"
+                id="width"
+                name="width"
+                placeholder="Width"
+                value={formData.width}
+                onChange={handleScopeOfWorkChange}
+              />
+              <label htmlFor="depth">Depth:</label>
+              <input
+                type="text"
+                id="depth"
+                name="depth"
+                placeholder="Depth"
+                value={formData.depth}
+                onChange={handleScopeOfWorkChange}
+              />
+            </div>
+          )}
+
+          {["brickwork", "blockwork"].includes(selectedScope) && (
+            <div>
+              <label htmlFor="wallThickness">Wall Thickness:</label>
+              <input
+                type="text"
+                id="wallThickness"
+                name="wallThickness"
+                placeholder="Wall Thickness"
+                value={formData.wallThickness}
+                onChange={handleScopeOfWorkChange}
+              />
+              <input
+                type="text"
+                id="length"
+                name="length"
+                placeholder="wall Length"
+                value={formData.length}
+                onChange={handleScopeOfWorkChange}
+              />
+              {/* Add more input fields for Brick Work or Block Work if needed */}
+            </div>
+          )}
+
+          {/* Add more conditionally rendered sections for other scope of works */}
+          {/* ... */}
+
+          <button type="submit">Calculate Total</button>
+        </form>
+      ))}
 
       <p>Total: {total}</p>
     </div>
