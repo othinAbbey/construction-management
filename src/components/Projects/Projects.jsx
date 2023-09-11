@@ -1,19 +1,24 @@
 import "./Projects.scss";
 import React from "react";
 import { ReactDOM } from "react";
-import { Route } from "react-router-dom";
+import { Outlet, Route } from "react-router-dom";
 import NewProjects from "./NewProject";
-import { Routes, Link } from "react-router-dom";
+import { Routes, Link, useNavigate } from "react-router-dom";
 function Projects() {
+  const navigate = useNavigate();
+  const newProjectsClick = () => {
+    navigate("/NewProjects");
+  };
+
   return (
-    <Routes>
-      <Route to="/NewProjects">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">
-          New Project
-        </button>
-      </Route>
-      <Route path="/NewProjects" element={<NewProjects />} />
-    </Routes>
+    <div>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={newProjectsClick}
+      >
+        New Project
+      </button>
+    </div>
   );
 }
 
