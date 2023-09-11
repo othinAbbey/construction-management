@@ -43,6 +43,23 @@ function NewProjects() {
 
   return (
     <div>
+      <label htmlFor="projectName">Project Name:</label>
+      <input id="projectName" type="text" placeholder="  Enter Project Name" />
+      <label htmlFor="projectLocation">Project Location: </label>
+      <input
+        id="projectLocation"
+        type="text"
+        placeholder="  Project Location"
+      />
+      <label htmlFor="starteDate">Start Date:</label>
+      <input id="startDate" type="datetime-local" placeholder=" Start Date" />
+      <label htmlFor="completionDate"> Completion Date: </label>
+      <input
+        id="completionDate"
+        type="datetime-local"
+        placeholder="Date Of Completion"
+      />
+      <h3>Scope of Works</h3>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="scopeOfWork">Scope of Works:</label>
