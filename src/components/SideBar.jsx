@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Sidebar.scss"; // Import CSS module for styling
+import "./SideBar.scss"; // Import CSS module for styling
 import { Button, Navbar, Nav } from "react-bootstrap";
 
 const Sidebar = () => {
