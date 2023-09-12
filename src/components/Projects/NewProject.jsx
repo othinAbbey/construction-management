@@ -63,20 +63,23 @@ function BrickworkForm({ calculateTotal, formData, handleInputChange }) {
 function BlockworkForm({ calculateTotal, formData, handleInputChange }) {
   return (
     <form onSubmit={calculateTotal}>
-      <label htmlFor="blockThickness">Block Thickness:</label>
+      <label htmlFor="blockWallThickness">Block Thickness:</label>
       <input
         type="number"
-        id="blockThickness"
+        name="blockWallThickness"
         value={formData.blockWallThickness}
         placeholder="Enter Block Wall Thickness"
+        onChange={handleInputChange}
       />
       <label htmlFor="blockWallLength">Block Wall Length:</label>
       <input
         type="number"
-        id="blockWallLength"
+        name="blockWallLength"
         value={formData.blockWallLength}
         placeholder="Enter Block Wall Length"
+        onChange={handleInputChange}
       />
+      <button type="submit">Calculate Total</button>
     </form>
   );
 }
