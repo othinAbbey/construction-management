@@ -1,251 +1,198 @@
 import React, { useState } from "react";
 
-function ExcavationForm({ calculateTotal, formData, handleInputChange }) {
-  return (
-    <form onSubmit={calculateTotal}>
-      <label htmlFor="length">Length:</label>
-      <input
-        type="text"
-        id="length"
-        name="length"
-        placeholder="Length"
-        value={formData.length}
-        onChange={handleInputChange}
-      />
-      <label htmlFor="width">Width:</label>
-      <input
-        type="text"
-        id="width"
-        name="width"
-        placeholder="Width"
-        value={formData.width}
-        onChange={handleInputChange}
-      />
-      <label htmlFor="depth">Depth:</label>
-      <input
-        type="text"
-        id="depth"
-        name="depth"
-        placeholder="Depth"
-        value={formData.depth}
-        onChange={handleInputChange}
-      />
-      <button type="submit">Calculate Total</button>
-    </form>
-  );
-}
-
-function BrickworkForm({ calculateTotal, formData, handleInputChange }) {
-  return (
-    <form onSubmit={calculateTotal}>
-      <label htmlFor="wallThickness">Wall Thickness:</label>
-      <input
-        type="text"
-        id="wallThickness"
-        name="wallThickness"
-        placeholder="Wall Thickness"
-        value={formData.wallThickness}
-        onChange={handleInputChange}
-      />
-      <label htmlFor="wallLength">Wall Length:</label>
-      <input
-        type="number"
-        id="wallLength"
-        name="wallLength"
-        placeholder="Wall Length"
-        value={formData.wallLength}
-        onChange={handleInputChange}
-      />
-      <button type="submit">Calculate Total</button>
-    </form>
-  );
-}
-function BlockworkForm({ calculateTotal, formData, handleInputChange }) {
-  return (
-    <form onSubmit={calculateTotal}>
-      <label htmlFor="blockWallThickness">Block Thickness:</label>
-      <input
-        type="number"
-        name="blockWallThickness"
-        value={formData.blockWallThickness}
-        placeholder="Enter Block Wall Thickness"
-        onChange={handleInputChange}
-      />
-      <label htmlFor="blockWallLength">Block Wall Length:</label>
-      <input
-        type="number"
-        name="blockWallLength"
-        value={formData.blockWallLength}
-        placeholder="Enter Block Wall Length"
-        onChange={handleInputChange}
-      />
-      <button type="submit">Calculate Total</button>
-    </form>
-  );
-}
 function NewProjects() {
   const [formData, setFormData] = useState({
     scopeOfWork: "",
     length: "",
     width: "",
     depth: "",
-    wallThickness: "",
-    wallLength: "",
-    quantity: "",
-    blockWallLength: "",
-    blockWallThickness: "",
-    // Add more input fields here
+    height: "",
   });
 
-  const [selectedScopeOfWork, setSelectedScopeOfWork] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [scopesOfWork, setScopesOfWork] = useState([]);
+  const [totals, setTotals] = useState({ excavation: 0, brickwork: 0 });
 
-  // Function to handle changes in the selected scope of work
-  const handleScopeOfWorkChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Function to calculate and update the total based on input values
-  const calculateTotal = (e) => {
-    e.preventDefault();
-    // Perform the calculation based on the selected scopes of work
-    let newTotal = 0;
+  const calculateExcavationVolume = (length, width, depth) => {
+    const l = parseFloat(length);
+    const w = parseFloat(width);
+    const d = parseFloat(depth);
 
-    if (selectedScopeOfWork.includes("excavation")) {
-      newTotal +=
-        parseFloat(formData.length) *
-        parseFloat(formData.width) *
-        parseFloat(formData.depth);
+    if (!isNaN(l) && !isNaN(w) && !isNaN(d)) {
+      return (l * w * d).toFixed(2);
+    } else {
+      return "Invalid Input";
     }
+  };
 
-    if (selectedScopeOfWork.includes("brickwork")) {
-      newTotal +=
-        parseFloat(formData.wallThickness) * parseFloat(formData.length);
+  const calculateBrickworkArea = (length, height) => {
+    const l = parseFloat(length);
+    const h = parseFloat(height);
+
+    if (!isNaN(l) && !isNaN(h)) {
+      return (l * h).toFixed(2);
+    } else {
+      return "Invalid Input";
     }
-
-    // Add calculations for other scopes of work as needed
-
-    setTotalQuantity(newTotal);
   };
 
-  // Function to handle the form submission
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleAddScopeOfWork = () => {
+    if (formData.scopeOfWork) {
+      const scopeData = { ...formData };
+
+      if (formData.scopeOfWork === "excavation") {
+        scopeData.totalValue = calculateExcavationVolume(
+          formData.length,
+          formData.width,
+          formData.depth
+        );
+      } else if (formData.scopeOfWork === "brickwork") {
+        scopeData.totalValue = calculateBrickworkArea(
+          formData.length,
+          formData.height
+        );
+      }
+
+      setScopesOfWork([...scopesOfWork, scopeData]);
+
+      // Update totals based on scope of work
+      if (formData.scopeOfWork === "excavation") {
+        setTotals({
+          ...totals,
+          excavation: totals.excavation + parseFloat(scopeData.totalValue),
+        });
+      } else if (formData.scopeOfWork === "brickwork") {
+        setTotals({
+          ...totals,
+          brickwork: totals.brickwork + parseFloat(scopeData.totalValue),
+        });
+      }
+
+      setFormData({
+        scopeOfWork: "",
+        length: "",
+        width: "",
+        depth: "",
+        height: "",
+      });
+    }
+  };
+
+  const handleClearForm = () => {
     setFormData({
-      ...formData,
-      [name]: value,
+      scopeOfWork: "",
+      length: "",
+      width: "",
+      depth: "",
+      height: "",
     });
-  };
-
-  // Function to add a selected scope of work to the list
-  const addScopeOfWork = () => {
-    setSelectedScopeOfWork([...selectedScopeOfWork, formData.scopeOfWork]);
-    setFormData({ ...formData, scopeOfWork: "" });
   };
 
   return (
-    <div>
-      <label htmlFor="projectName">Project Name:</label>
-      <input id="projectName" type="text" placeholder="  Enter Project Name" />
-      <label htmlFor="projectLocation">Project Location: </label>
-      <input
-        id="projectLocation"
-        type="text"
-        placeholder="  Project Location"
-      />
-      <label htmlFor="starteDate">Start Date:</label>
-      <input id="startDate" type="datetime-local" placeholder=" Start Date" />
-      <label htmlFor="completionDate"> Completion Date: </label>
-      <input
-        id="completionDate"
-        type="datetime-local"
-        placeholder="Date Of Completion"
-      />
-      <h1 className="text-xl font-bold">Works Section</h1>
-      <div>
-        <label htmlFor="scopeOfWork">Works:</label>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">New Project Details</h1>
+      <div className="mb-4">
+        <label className="block mb-1">Scope of Work:</label>
         <select
-          id="scopeOfWork"
           name="scopeOfWork"
-          onChange={(e) => setSelectedScopeOfWork(e.target.value)}
-          value={selectedScopeOfWork}
+          value={formData.scopeOfWork}
+          onChange={handleChange}
+          className="border rounded p-1"
         >
-          <option value=" ">Select</option>
+          <option value="">Select Scope of Work</option>
           <option value="excavation">Excavation</option>
           <option value="brickwork">Brick Work</option>
-          <option value="blockwork">Block Work</option>
-          <option value="plastering">Plastering</option>
-          <option value="Concrete">Concrete</option>
-          {/* ... options ... */}
         </select>
-
-        <button type="button" onClick={addScopeOfWork}>
-          Add Scope of Work
-        </button>
       </div>
-      {/* {selectedScopeOfWork === "excavation" && (
-        <div>
-          <h2 className="text-lg font-bold">Scope of Work: Excavation</h2>
-          <ExcavationForm
-            calculateTotal={calculateTotal}
-            formData={formData}
-            handleInputChange={handleInputChange}
+      {formData.scopeOfWork === "excavation" && (
+        <div className="mb-4">
+          <label className="block mb-1">Length:</label>
+          <input
+            type="text"
+            name="length"
+            value={formData.length}
+            onChange={handleChange}
+            className="border rounded p-1"
+          />
+          <label className="block mb-1">Width:</label>
+          <input
+            type="text"
+            name="width"
+            value={formData.width}
+            onChange={handleChange}
+            className="border rounded p-1"
+          />
+          <label className="block mb-1">Depth:</label>
+          <input
+            type="text"
+            name="depth"
+            value={formData.depth}
+            onChange={handleChange}
+            className="border rounded p-1"
           />
         </div>
       )}
-
-      {selectedScopeOfWork === "brickwork" && (
-        <div>
-          <h2 className="text-lg font-bold">Scope of Work: Brick Work</h2>
-          <BrickworkForm
-            calculateTotal={calculateTotal}
-            formData={formData}
-            handleInputChange={handleInputChange}
+      {formData.scopeOfWork === "brickwork" && (
+        <div className="mb-4">
+          <label className="block mb-1">Length:</label>
+          <input
+            type="text"
+            name="length"
+            value={formData.length}
+            onChange={handleChange}
+            className="border rounded p-1"
           />
-        </div>
-      )} */}
-      {/* Render other scope of work forms as needed */}
-      {selectedScopeOfWork === "excavation" && (
-        <div>
-          <h2 className="text-lg font-bold">Scope of Work: Excavation</h2>
-          <ExcavationForm
-            calculateTotal={calculateTotal}
-            formData={formData}
-            handleInputChange={handleInputChange}
-          />
-        </div>
-      )}
-
-      {selectedScopeOfWork === "brickwork" && (
-        <div>
-          <h2 className="text-lg font-bold">Scope of Work: Brick Work</h2>
-          <BrickworkForm
-            calculateTotal={calculateTotal}
-            formData={formData}
-            handleInputChange={handleInputChange}
+          <label className="block mb-1">Height:</label>
+          <input
+            type="text"
+            name="height"
+            value={formData.height}
+            onChange={handleChange}
+            className="border rounded p-1"
           />
         </div>
       )}
-
-      {selectedScopeOfWork === "blockwork" && (
-        <div>
-          <h2 className="text-lg font-bold">Scope of Work: Block Work</h2>
-          <BlockworkForm
-            calculateTotal={calculateTotal}
-            formData={formData}
-            handleInputChange={handleInputChange}
-          />
-        </div>
-      )}
-
-      {/* Render other scope of work forms as needed */}
-      {/* Render other scope of work forms as needed */}
-
-      <p>Total: {totalQuantity}</p>
+      <button
+        onClick={handleAddScopeOfWork}
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      >
+        Add Scope of Work
+      </button>
+      <button
+        onClick={handleClearForm}
+        className="bg-gray-500 text-white py-2 px-4 rounded ml-2 hover:bg-gray-600"
+      >
+        Clear Form
+      </button>
+      <div className="mt-4">
+        <h2 className="text-xl font-bold mb-2">Totals</h2>
+        <table className="border-collapse border w-full">
+          <thead>
+            <tr>
+              <th className="border p-2">Scope of Work</th>
+              <th className="border p-2">Total Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border p-2">Excavation</td>
+              <td className="border p-2">
+                {totals.excavation.toFixed(2)} cubic meters
+              </td>
+            </tr>
+            <tr>
+              <td className="border p-2">Brick Work</td>
+              <td className="border p-2">
+                {totals.brickwork.toFixed(2)} square meters
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
