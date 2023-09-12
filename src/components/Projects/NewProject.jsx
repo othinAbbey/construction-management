@@ -60,7 +60,26 @@ function BrickworkForm({ calculateTotal, formData, handleInputChange }) {
     </form>
   );
 }
-
+function BlockworkForm({ calculateTotal, formData, handleInputChange }) {
+  return (
+    <form onSubmit={calculateTotal}>
+      <label htmlFor="blockThickness">Block Thickness:</label>
+      <input
+        type="number"
+        id="blockThickness"
+        value={formData.blockWallThickness}
+        placeholder="Enter Block Wall Thickness"
+      />
+      <label htmlFor="blockWallLength">Block Wall Length:</label>
+      <input
+        type="number"
+        id="blockWallLength"
+        value={formData.blockWallLength}
+        placeholder="Enter Block Wall Length"
+      />
+    </form>
+  );
+}
 function NewProjects() {
   const [formData, setFormData] = useState({
     scopeOfWork: "",
@@ -70,6 +89,8 @@ function NewProjects() {
     wallThickness: "",
     wallLength: "",
     quantity: "",
+    blockWallLength: "",
+    blockWallThickness: "",
     // Add more input fields here
   });
 
@@ -200,6 +221,17 @@ function NewProjects() {
         <div>
           <h2 className="text-lg font-bold">Scope of Work: Brick Work</h2>
           <BrickworkForm
+            calculateTotal={calculateTotal}
+            formData={formData}
+            handleInputChange={handleInputChange}
+          />
+        </div>
+      )}
+
+      {selectedScopeOfWork === "blockwork" && (
+        <div>
+          <h2 className="text-lg font-bold">Scope of Work: Block Work</h2>
+          <BlockworkForm
             calculateTotal={calculateTotal}
             formData={formData}
             handleInputChange={handleInputChange}
