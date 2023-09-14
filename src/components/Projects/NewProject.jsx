@@ -10,7 +10,11 @@ function NewProjects() {
   });
 
   const [scopesOfWork, setScopesOfWork] = useState([]);
-  const [totals, setTotals] = useState({ excavation: 0, brickwork: 0 });
+  const [totals, setTotals] = useState({
+    excavation: 0,
+    brickwork: 0,
+    Concrete: 0,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +26,17 @@ function NewProjects() {
     const w = parseFloat(width);
     const d = parseFloat(depth);
 
+    if (!isNaN(l) && !isNaN(w) && !isNaN(d)) {
+      return (l * w * d).toFixed(2);
+    } else {
+      return "Invalid Input";
+    }
+  };
+
+  const calculateConcreteVolume = (length, width, depth) => {
+    const l = parseFloat(length);
+    const w = parseFloat(width);
+    const d = parseFloat(depth);
     if (!isNaN(l) && !isNaN(w) && !isNaN(d)) {
       return (l * w * d).toFixed(2);
     } else {
@@ -55,6 +70,11 @@ function NewProjects() {
           formData.length,
           formData.height
         );
+      } else if (formData.scopeOfWork === "Concrete") {
+        scopeData.totalValue = calculateConcreteVolume(
+          formData.length,
+          formData.height
+        );
       }
 
       setScopesOfWork([...scopesOfWork, scopeData]);
@@ -69,6 +89,11 @@ function NewProjects() {
         setTotals({
           ...totals,
           brickwork: totals.brickwork + parseFloat(scopeData.totalValue),
+        });
+      } else if (formData.scopeOfWork === "Concrete") {
+        setTotals({
+          ...totals,
+          Concrete: totals.Concrete + parseFloat(scopeData.totalValue),
         });
       }
 
@@ -106,6 +131,7 @@ function NewProjects() {
           <option value="">Select Scope of Work</option>
           <option value="excavation">Excavation</option>
           <option value="brickwork">Brick Work</option>
+          <option value="Concrete">Concrete</option>
         </select>
       </div>
       {formData.scopeOfWork === "excavation" && (
@@ -156,6 +182,36 @@ function NewProjects() {
           />
         </div>
       )}
+
+      {formData.scopeOfWork === "Concrete" && (
+        <div className="mb-4">
+          <label className="block mb-1">Length:</label>
+          <input
+            type="text"
+            name="length"
+            value={formData.length}
+            onChange={handleChange}
+            className="border rounded p-1"
+          />
+          <label className="block mb-1">Width:</label>
+          <input
+            type="text"
+            name="width"
+            value={formData.width}
+            onChange={handleChange}
+            className="border rounded p-1"
+          />
+          <label className="block mb-1">Depth:</label>
+          <input
+            type="text"
+            name="depth"
+            value={formData.depth}
+            onChange={handleChange}
+            className="border rounded p-1"
+          />
+        </div>
+      )}
+
       <button
         onClick={handleAddScopeOfWork}
         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
@@ -188,6 +244,12 @@ function NewProjects() {
               <td className="border p-2">Brick Work</td>
               <td className="border p-2">
                 {totals.brickwork.toFixed(2)} square meters
+              </td>
+            </tr>
+            <tr>
+              <td className="border p-2">Concrete</td>
+              <td className="border p-2">
+                {totals.Concrete.toFixed(2)} cubic meters
               </td>
             </tr>
           </tbody>
