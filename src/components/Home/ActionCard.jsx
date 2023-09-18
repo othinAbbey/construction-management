@@ -1,11 +1,11 @@
 import React from "react";
-
+import "../MaterialsCalc/MaterialCard.css";
 function ActionCard(props) {
   return (
     <>
-      <div className="action-card">
-        <div className="action-card__icon">{props.icon}</div>
-        <div className="action-card__info">
+      <div className="Material-Card">
+        <div className="Material Image">{props.icon}</div>
+        <div className="item-details">
           <h3>{props.title}</h3>
           <p>{props.description}</p>
         </div>
@@ -13,4 +13,5 @@ function ActionCard(props) {
     </>
   );
 }
+
 export default ActionCard;
