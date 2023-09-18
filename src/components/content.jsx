@@ -4,6 +4,7 @@ import Home from "./Home";
 import Materials from "./Materials";
 import Projects from "./Projects/Projects";
 import NewProjects from "./Projects/NewProject";
+import { About } from "./About/About";
 // import "./Content.css";
 
 function Content() {
@@ -14,6 +15,7 @@ function Content() {
         <Route path="/Materials" element={<Materials />} />
         <Route path="/Projects" element={<Projects />} />
         <Route path="/NewProjects" element={<NewProjects />} />
+        <Route path="/About" element={<About />} />
       </Routes>
     </div>
   );
