@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Excavation from "./Excavation/Excavation";
 
 function Estimation() {
   const works = [
@@ -67,8 +68,7 @@ function Estimation() {
       <div>
         {selectedWork === "excavation" && (
           <>
-            <label htmlFor="length">Length</label>
-            <input type="number" id="length" />
+            <Excavation />
           </>
         )}
       </div>
