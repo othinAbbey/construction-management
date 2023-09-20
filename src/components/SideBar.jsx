@@ -16,7 +16,7 @@ const Sidebar = () => {
     { name: "Projects", path: "/Projects" },
     { name: "Contact us", path: "/Contactus" },
     { name: "About", path: "/About" },
-    { name: "Tasks", path: "/Tasks" },
+    { name: "Estimation", path: "/Estimation" },
     { name: "Gallery", path: "/Gallery" },
   ];
   return (
