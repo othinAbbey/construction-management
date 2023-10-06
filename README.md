@@ -39,7 +39,7 @@ Configure the application with your database credentials, API keys, and other en
 ## Run the Application:
 
 Start the web application.
-`npm start
+`npx run dev
 `
 
 ## Access the Application:
@@ -53,9 +53,9 @@ Open your web browser and access the application at http://localhost:3000 (or th
 HTML5
 CSS3
 JavaScript
-React.js
+Next.js
 Redux for state management
-Axios for API requests
+fetch for API requests
 
 ### Backend:
 
