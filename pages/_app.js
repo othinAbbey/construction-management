@@ -22,7 +22,9 @@ import "@/styles/globals.css";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import '../styles/globals.css';
+// import '../styles/globals.css';
+import './globals.css'
+
 
 function App({ Component, pageProps }) {
   return (
