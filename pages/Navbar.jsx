@@ -7,6 +7,11 @@ const buttons = [
   { text: "About Us", link: "/about" },
   { text: "Contact Us", link: "/contact" },
   { text: "Login", link: "/login" },
+  { text: "LogOut", link: "/logout" },
+  { text: "Create Acoount", link: "/newaccount" },
+
+
+  
 ];
 
 function Navbar() {
