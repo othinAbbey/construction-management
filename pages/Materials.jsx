@@ -117,30 +117,35 @@ function Materials() {
     setSelectedMaterial(e.target.value);
     setMaterialSelected(e.target.value !== materials[0].value);
   
-    const filteredResults = searchResults.filter((result) => {
-      const isRegionMatch = selectedRegion === regions[0].value || result.Region === selectedRegion;
-      const isMaterialMatch =
-        (e.target.value === "Other" || result.Material.toLowerCase() === e.target.value.toLowerCase()) && isRegionMatch;
+    // const filteredResults = searchResults.filter((result) => {
+    //   const isRegionMatch = selectedRegion === regions[0].value || result.Region === selectedRegion;
+    //   const isMaterialMatch =
+    //     (e.target.value === "Other" || result.Material.toLowerCase() === e.target.value.toLowerCase()) && isRegionMatch;
   
-      return isMaterialMatch;
-    });
+    //   return isMaterialMatch;
+    // });
   
     // Update the filtered results state
     setFilteredResults(filteredResults);
   };
 
   const handleSearch = () => {
-    const filteredResults = searchResults.filter((result) => {
-      const isRegionMatch = selectedRegion === regions[0].value || result.Region === selectedRegion;
-      const isMaterialMatch =
-        (selectedMaterial === "Other" || result.Material.toLowerCase() === selectedMaterial.toLowerCase()) && isRegionMatch;
-
-      return isMaterialMatch;
-    });
-
-    setFilteredResults(filteredResults);
-    setShowResults(true);
+    if (regionSelected && materialSelected) {
+      const filteredResults = searchResults.filter((result) => {
+        const isRegionMatch = selectedRegion === regions[0].value || result.Region === selectedRegion;
+        const isMaterialMatch =
+          (selectedMaterial === "Other" || result.Material.toLowerCase() === selectedMaterial.toLowerCase());
+  
+        // Combine the conditions to filter the results
+        return isRegionMatch && isMaterialMatch;
+      });
+  
+      setFilteredResults(filteredResults);
+      setShowResults(true);
+    }
   };
+  
+  
 
   const resetSelection = () => {
     setSelectedRegion(regions[0].value);
