@@ -151,4 +151,4 @@ const materials = [
     ], Size: [{R8:20000, }, {Y10:32000}, {Y12:35000}, {Y16:37000}, {Y18:40000}, {Y25:45000}, {Y32:50000}]},
   ]
     
-  export { regions, materials, searchResults };
+  export default { regions, materials, searchResults };
