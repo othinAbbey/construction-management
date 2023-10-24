@@ -14,7 +14,9 @@ function Navbar() {
 
   return (
     <nav className="bg-blue-500 p-4 flex items-center justify-between fixed top-0 right-0 w-full z-10 ">
-      <div className="text-white ">Logo</div>
+      <div className="text-white">
+        <img src="./logo.jpg" alt="Logo" />
+    </div>
 
       {/* Toggle the menu button for smaller screens */}
       <button

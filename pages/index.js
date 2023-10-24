@@ -32,9 +32,12 @@ function Home() {
         <p className="text-lg text-gray-600 mb-10">
           Empower your construction projects with our comprehensive suite of tools and features designed to simplify project management and enhance your success in remote and upcountry areas. Explore the following key functionalities:
         </p>
-        <Link href="/GetStarted" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded " >
+        <Link href="/GetStarted" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded mr-5" >
           Get Started
         </Link>
+        <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded " >
+          Login
+          </Link>
       </div>
     </div>
   );
