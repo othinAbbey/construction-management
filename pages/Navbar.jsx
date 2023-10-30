@@ -6,7 +6,7 @@ const buttons = [
   { text: "Home", link: "/" },
   { text: "About Us", link: "/about" },
   { text: "Contact Us", link: "/contact" },
-  { text: "Login", link: "/login" },
+  { text: "Admin", link: "/admin" },
   { text: "LogOut", link: "/logout" },
   { text: "Create Acoount", link: "/newaccount" },
 
