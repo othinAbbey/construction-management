@@ -7,28 +7,41 @@ const regions = [
             { value: 'West Nile' },
             { value: 'Eastern' }
           ];
+// const materials = [
+//             { value: '-- Select Material --' },
+//             { value: 'Cement' },
+//             { value: 'Steel' },
+//             { value: 'Timber' },
+//             { value: 'Bricks' },
+//             { value: 'Tiles' },
+//             { value: 'Paint' },
+//             { value: 'Sanitary Fittings' },
+//             { value: 'Electrical Fittings' },
+//             { value: 'Roofing Materials' },
+//             { value: 'Doors' },
+//             { value: 'Windows' },
+//             { value: 'Plumbing Materials' },
+//             { value: 'Glass' },
+//             { value: 'sand' },
+//             { value: 'Furniture' },
+//             { value: 'Flooring Materials' },
+//             { value: 'Ceiling Materials' },
+//             { value: 'Insulation Materials' },
+//             { value: 'Other' }
+//           ];
+
 const materials = [
-            { value: '-- Select Material --' },
-            { value: 'Cement' },
-            { value: 'Steel' },
-            { value: 'Timber' },
-            { value: 'Bricks' },
-            { value: 'Tiles' },
-            { value: 'Paint' },
-            { value: 'Sanitary Fittings' },
-            { value: 'Electrical Fittings' },
-            { value: 'Roofing Materials' },
-            { value: 'Doors' },
-            { value: 'Windows' },
-            { value: 'Plumbing Materials' },
-            { value: 'Glass' },
-            { value: 'sand' },
-            { value: 'Furniture' },
-            { value: 'Flooring Materials' },
-            { value: 'Ceiling Materials' },
-            { value: 'Insulation Materials' },
-            { value: 'Other' }
-          ];
+  { value: '-- Select Material --' },
+  { value: 'Cement', subMaterials: ['Sem 2', 'Sem 3'] },
+  { value: 'Steel', subMaterials: ['25mm', '30mm'] },
+  { value: 'Timber', subMaterials: ['Pine','Malina', 'Tick', 'Muvule'] }, // Add sub-materials for Timber as needed
+  { value: 'Bricks', subMaterials: ['Clay','Fire/Engineering', 'Tick'] }, // Add sub-materials for Timber as needed
+  { value: 'Sand', subMaterials: ['Lake-sand','Pit-sand'] }, // Add sub-materials for Timber as needed
+  { value: 'Aggregate', subMaterials: ['Fine-Aggregate','Couse-Aggregate'] }, // Add sub-materials for Timber as needed
+  // Add other materials
+];
+
+
  const searchResults= [
     {Material: "sand", Region: "Western", Price: 1000, Unit: "tons", 
     Supplier:[
