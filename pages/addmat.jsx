@@ -73,9 +73,9 @@ const YourFormComponent = () => {
   
   return (
     <div className="mt-16 p-4 bg-gray-100 rounded-lg shadow-lg">
-      <form className="max-w-md mx-auto p-4 border rounded bg-gray-200" onSubmit={handleSubmit}>
+      <form  className="max-w-md mx-auto p-4 border rounded bg-gray-200" onSubmit={handleSubmit}>
     {/* <form className="max-w-md mx-auto p-4 border rounded bg-gray-200" onSubmit={handleSubmit}> */}
-      <label htmlFor="RegionName">Enter Region</label>
+      <label htmlFor="RegionName" className="block mb-2 font-bold text-gray-800">Enter Region</label>
       
   {/* <select  className="w-full border rounded py-2 px-2 mb-3"
         type="text"
@@ -91,7 +91,7 @@ const YourFormComponent = () => {
 </select> */}
 
 <select id="materialSelect" onChange={handleMaterialChange} value={selectedMaterial}>
-        {materials.map((material, index) => (
+        {regions.map((material, index) => (
           <option key={index} value={material.value}>
             {material.value}
           </option>
@@ -122,11 +122,11 @@ const YourFormComponent = () => {
 
 
 {selectedMaterial && subMaterials.length > 0 && (
-        <div className="mt-16 p-4 bg-gray-100 rounded-lg shadow-lg">
+        <div >
           <label htmlFor="subMaterial" className="block mb-2 font-bold text-gray-800">Sub-Material:</label>
           <select
           id="regionName"
-          className="w-full border rounded py-2 px-3 mb-3"
+          className="block mb-2 text-gray-800"
           onChange={handleMaterialChange}
           value={selectedMaterial}
           >
@@ -164,3 +164,5 @@ type="button"
 };
 
 export default YourFormComponent;
+
+
