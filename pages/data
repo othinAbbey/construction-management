@@ -1,15 +1,15 @@
 
 
-const regions = [
-            { value: '-- Select Region --' },
-            { value: 'Western', subMaterials: ['Weastern 1', 'Weastern 2'] },
-            { value: 'Northern', subMaterials: ['Nortehrn 1', 'Northern 2'] },
-            { value: 'West Nile', subMaterials: ['West Nile 1', 'West Nile2'] },
-            { value: 'Eastern', subMaterials: ['Eastern 1', 'Eastern 2'] }
-          ];
+// const regions = [
+//             { value: '-- Select Region --' },
+//             { value: 'Western', subMaterials: ['Weastern 1', 'Weastern 2'] },
+//             { value: 'Northern', subMaterials: ['Nortehrn 1', 'Northern 2'] },
+//             { value: 'West Nile', subMaterials: ['West Nile 1', 'West Nile2'] },
+//             { value: 'Eastern', subMaterials: ['Eastern 1', 'Eastern 2'] }
+//           ];
 
 
-  const regions2 = await fetch('http://localhost:8000/api/regions')
+  const regions = await fetch('http://localhost:8000/api/regions')
   
   
 
