@@ -35,8 +35,11 @@ function Home() {
         <Link href="/GetStarted" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded mr-5" >
           Get Started
         </Link>
-        <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded " >
+        <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded mr-5 " >
           Login
+          </Link>
+          <Link href="/signup" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-1 rounded " >
+          Sign Up
           </Link>
       </div>
     </div>
