@@ -33,7 +33,7 @@ function SignUpPage() {
             // Handle account creation (use state for first name, last name, email, phone, region, and account type)
             // e.preventDefault();
             try {
-                const   response = await fetch('http://localhost:8000/user/signup', {
+                const   response = await fetch('https://canda.onrender.com/user/signup', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

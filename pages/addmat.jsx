@@ -33,7 +33,7 @@ const addSupplier = () => {
     // Code for submitting form data (fetch API call) 
     try {
       // Sample fetch call
-      const response = await fetch('http://localhost:8000/api/createSupplier', {
+      const response = await fetch('https://canda.onrender.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

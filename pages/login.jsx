@@ -27,7 +27,7 @@ function LoginPage() {
       return;
   }
     if (loginWithEmail) {
-    const response = await fetch("https://canda.onrender.com/login", {
+    const response = await fetch("https://canda.onrender.com/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
