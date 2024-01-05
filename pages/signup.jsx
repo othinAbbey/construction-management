@@ -1,10 +1,25 @@
-import {useState} from 'react';
+import React, { useState } from 'react';
+
+// import {useState} from 'react';
 
 function SignUpPage() {
+    
     try {
+        
+
+        // const [signupWithEmail, setSignupWithEmail] = useState(false);
+        // const [signupWithPhone, setSignupWithPhone] = useState(false);
+        // const [creatingAccount, setCreatingAccount] = useState(false);
         const [signupWithEmail, setSignupWithEmail] = useState(false);
         const [signupWithPhone, setSignupWithPhone] = useState(false);
         const [creatingAccount, setCreatingAccount] = useState(false);
+        const [firstName, setFirstName] = useState('');
+        const [lastName, setLastName] = useState('');
+        const [email, setEmail] = useState('');
+        const [phone, setPhone] = useState('');
+        const [password, setPassword] = useState('');
+        const [region, setRegion] = useState('');
+        const [accountType, setAccountType] = useState('');
 
         const handleSignup = () => {
             if (signupWithEmail) {
@@ -14,9 +29,38 @@ function SignUpPage() {
             }
         };
 
-        const handleCreateAccount = () => {
+        const handleCreateAccount = async () => {
             // Handle account creation (use state for first name, last name, email, phone, region, and account type)
-        };
+            // e.preventDefault();
+            try {
+                const   response = await fetch('http://localhost:8000/user/signup', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    password,
+                    region,
+                    accountType,
+                  }),
+                });
+          
+                const data = await response.json();
+          
+                // Handle the response from the backend (e.g., show a success message, redirect, etc.)
+                console.log(data);
+              } catch (error) {
+                console.error('Error creating account:', error);
+              } finally {
+                setCreatingAccount(false);
+              }
+            };
+          
+         
 
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -75,6 +119,8 @@ function SignUpPage() {
                         </label>
                         <input
                             type="text"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
@@ -84,6 +130,8 @@ function SignUpPage() {
                         </label>
                         <input
                             type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
@@ -94,6 +142,8 @@ function SignUpPage() {
                             </label>
                             <input
                                 type="text"
+                                value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                         </div>
@@ -104,7 +154,9 @@ function SignUpPage() {
                                 Phone Number
                             </label>
                             <input
-                                type="text"
+                                type="number"
+                                value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                         </div>
@@ -115,10 +167,12 @@ function SignUpPage() {
                         </label>
                         <input
                             type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Region
                         </label>
@@ -141,7 +195,7 @@ function SignUpPage() {
                             <option>Individual</option>
                             <option>Company</option>
                         </select>
-                    </div>
+                    </div> */}
                     <button
                         className={`w-full bg-green-500 text-white font-bold py-2 px-4 rounded mt-4 ${
                             creatingAccount ? "bg-green-600" : "bg-green-500"
@@ -169,174 +223,3 @@ export default SignUpPage;
 
 
 
-// import { useState } from "react";
-
-// function LoginPage() {
-//   const [loginWithEmail, setLoginWithEmail] = useState(false);
-//   const [loginWithPhone, setLoginWithPhone] = useState(false);
-//   const [creatingAccount, setCreatingAccount] = useState(false);
-
-//   const handleLogin = () => {
-//     if (loginWithEmail) {
-//       // Handle login with email (use state for email and password)
-//     } else if (loginWithPhone) {
-//       // Handle login with phone (use state for phone and password)
-//     }
-//   };
-
-//   const handleCreateAccount = () => {
-//     // Handle account creation (use state for first name, last name, email, phone, region, and account type)
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-//       <div className="w-full max-w-md p-6 bg-white rounded shadow-md">
-//         <h2 className="text-2xl text-center mb-4">Welcome to Construction Manager</h2>
-//         {/* <div className="mb-4 flex">
-//           <button
-//             className={`flex-1 bg-blue-500 text-white font-bold py-2 px-4 rounded ${
-//               loginWithEmail ? "bg-blue-600" : "bg-blue-500"
-//             }`}
-//             onClick={() => {
-//               setLoginWithEmail(true);
-//               setLoginWithPhone(false);
-//             }}
-//           >
-//             Login With Email Address
-//           </button>
-//           <button
-//             className={`flex-1 bg-blue-500 text-white font-bold py-2 px-4 rounded ${
-//               loginWithPhone ? "bg-blue-600" : "bg-blue-500"
-//             }`}
-//             onClick={() => {
-//               setLoginWithPhone(true);
-//               setLoginWithEmail(false);
-//             }}
-//           >
-//             Login With Phone Number
-//           </button> */}
-
-// <div className="mb-4 flex">
-//   <button
-//     className={`flex-1 bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2 ${
-//       loginWithEmail ? "bg-blue-600" : "bg-blue-500"
-//     }`}
-//     onClick={() => {
-//       setLoginWithEmail(true);
-//       setLoginWithPhone(false);
-//     }}
-//   >
-//     Login With Email Address
-//   </button>
-//   <button
-//     className={`flex-1 bg-blue-500 text-white font-bold py-2 px-4 rounded ${
-//       loginWithPhone ? "bg-blue-600" : "bg-blue-500"
-//     }`}
-//     onClick={() => {
-//       setLoginWithPhone(true);
-//       setLoginWithEmail(false);
-//     }}
-//   >
-//     Login With Phone Number
-//   </button>
-
-
-//         </div>
-//         {loginWithEmail && (
-//           <div className="mt-4">
-//             <input
-//               type="text"
-//               placeholder="Email"
-//               className="w-full border rounded py-2 px-3"
-//             />
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               className="w-full border rounded py-2 px-3 mt-2"
-//             />
-//             <button
-//               className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4"
-//               onClick={handleLogin}
-//             >
-//               Login
-//             </button>
-//             <button className="text-blue-500 mt-2">Forgot Password</button>
-//           </div>
-//         )}
-//         {loginWithPhone && (
-//           <div className="mt-4">
-//             <input
-//               type="text"
-//               placeholder="Phone"
-//               className="w-full border rounded py-2 px-3"
-//             />
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               className="w-full border rounded py-2 px-3 mt-2"
-//             />
-//             <button
-//               className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4"
-//               onClick={handleLogin}
-//             >
-//               Login
-//             </button>
-//             <button className="text-blue-500 mt-2">Forgot Password</button>
-//           </div>
-//         )}
-//         <div className="mb-4">
-//             <h4>New to Site Simplify?</h4>
-//           <button
-//             className={`w-full bg-green-500 text-white font-bold py-2 px-4 rounded mt-4 ${
-//               creatingAccount ? "bg-green-600" : "bg-green-500"
-//             }`}
-//             onClick={() => setCreatingAccount(true)}
-//           >
-//             Create an Account
-//           </button>
-//           {creatingAccount && (
-//             <div className="mt-4">
-//               <input
-//                 type="text"
-//                 placeholder="First Name"
-//                 className="w-full border rounded py-2 px-3"
-//               />
-//               <input
-//                 type="text"
-//                 placeholder="Last Name"
-//                 className="w-full border rounded py-2 px-3 mt-2"
-//               />
-//               <select className="w-full border rounded py-2 px-3 mt-2">
-//                 <option value="individual">Individual</option>
-//                 <option value="company">Company</option>
-//               </select>
-//               <input
-//                 type="text"
-//                 placeholder="Email"
-//                 className="w-full border rounded py-2 px-3 mt-2"
-//               />
-//               <input
-//                 type="text"
-//                 placeholder="Phone Number"
-//                 className="w-full border rounded py-2 px-3 mt-2"
-//               />
-//               <input
-//                 type="text"
-//                 placeholder="Region"
-//                 className="w-full border rounded py-2 px-3 mt-2"
-//               />
-//               <button
-//                 className="w-full bg-green-500 text-white font-bold py-2 px-4 rounded mt-4"
-//                 onClick={handleCreateAccount}
-//               >
-//                 Create Account
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default LoginPage;
