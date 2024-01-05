@@ -54,7 +54,7 @@ function LoginPage() {
   const handleCreateAccount = async () => {
   
    
-   const   response = await fetch('https://canda.onrender.com/signup', {
+   const   response = await fetch('https://canda.onrender.com/user/signup', {
      method: 'POST',
      headers: {
        'Content-Type': 'application/json',
