@@ -28,30 +28,30 @@ const addSupplier = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    // Code for submitting form data (fetch API call) 
-    try {
-      // Sample fetch call
-      const response = await fetch('https://canda.onrender.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+    // // Code for submitting form data (fetch API call) 
+    // try {
+    //   // Sample fetch call
+    //   const response = await fetch('https://canda.onrender.com', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(formData)
+    //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Supplier created:', data);
-        // Update UI or perform additional actions as needed
-      } else {
-        throw new Error('Network response was not ok.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle error (display message, retry logic, etc.)
-    }
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log('Supplier created:', data);
+    //     // Update UI or perform additional actions as needed
+    //   } else {
+    //     throw new Error('Network response was not ok.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    //   // Handle error (display message, retry logic, etc.)
+    // }
   };
 
   return (
