@@ -44,7 +44,8 @@ function LoginPage() {
           // Handle login with email (use state for email and password)
         }
         const data = await response.json();
-        console.log("Login successful:", data);
+        alert("Login successful");
+        // console.log("Login successful:", data);
         // Handle successful login (e.g., redirect to dashboard)
         //redirect to dashboard
         window.location.href = "/GetStarted";
@@ -52,7 +53,8 @@ function LoginPage() {
     };
 
     const handleCreateAccount = async () => {
-      const response = await fetch("https://canda.onrender.com/user/signup", {
+      // const response = await fetch("https://canda.onrender.com/user/signup", {
+      const response = await fetch("http://localhost:8000/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +72,7 @@ function LoginPage() {
       try {
         const data = await response.json();
         // Handle the response from the backend (e.g., show a success message, redirect, etc.)
-        console.log(data);
+        // console.log(data);
         if (response.ok) {
           alert("Account created successfully; please login to continue.");
         } else {
@@ -145,8 +147,10 @@ function LoginPage() {
             onClick={() => {
               if (loginWithEmail) {
                 handleLogin();
+                
               } else {
                 setLoginWithEmail(true);
+                setCreatingAccount(false)
               }
               // handleLogin();
               // setLoginWithEmail(true)
@@ -248,6 +252,7 @@ function LoginPage() {
                 if (creatingAccount) {
                   handleCreateAccount();
                 } else {
+                  setLoginWithEmail(false);
                   setCreatingAccount(true);
                 }
               }}
