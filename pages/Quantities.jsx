@@ -2,249 +2,225 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-function Quantities() {
-  const [quantities, setQuantities] = useState([
-    {
-      image: "https://picsum.photos/seed/picsum/200/300",
-      name: "Bricks",
-      type: "Cement",
-      unit: "pcs",
-      price: 1000,
-      total: 0,
-      quantity: 0,
-      size: "N/A",
-    },
-    {
-      image: "https://picsum.photos/seed/picsum/200/300",
-      name: "Blocks",
-      type: "Solid",
-      size: "100 X 200 X 400",
-      unit: "pcs",
-      price: 2000,
-      total: 0,
-      quantity: 0,
-    },
-    {
-      image: "https://picsum.photos/seed/picsum/200/300",
-      name: "Solid Blocks",
-      type: "Solid",
-      size: "200 X 200 X 400",
-      unit: "pcs",
-      price: 3000,
-      total: 0,
-      quantity: 0,
-    },
-    {
-      image: "https://picsum.photos/seed/picsum/200/300",
-      name: "Hollow Blocks",
-      type: "Hollow",
-      size: "200 X 200 X 400",
-      unit: "pcs",
-      price: 4000,
-      total: 0,
-      quantity: 0,
-    },
-    {
-      image: "https://picsum.photos/seed/picsum/200/300",
-      name: "Solid Blocks",
-      type: "Hollow",
-      size: "150 X 200 X 400",
-      unit: "pcs",
-      price: 5000,
-      total: 0,
-      quantity: 0,
-    },
-  ]);
-
-  // Function to handle quantity input changes
-  const handleQuantityChange = (index, value) => {
-    const updatedQuantities = [...quantities];
-    updatedQuantities[index].quantity = value;
-    updatedQuantities[index].total = value * updatedQuantities[index].price;
-    setQuantities(updatedQuantities);
-  };
-
-  // Function to handle size input changes
-  const structures = [
-    "Boundary wall",
-    "Plinth Wall",
-    "Column",
-    "Beam",
-    "Slab",
-    "Staircase",
-    "Roof",
-    "Lintel",
-    "Chajja",
-    "Sunshade",
-    "Parapet",
-    "DPC",
-    "Flooring",
-    "Plastering",
-    "Painting",
-    "PCC",
-    "RCC",
-    "Brickwork",
-    "Plumbing",
-    "Electrical",
-    "Carpentry",
-    "Steelwork",
-    "Waterproofing",
-    "Tiles",
-    "Marble",
-    "Granite",
-    "Aluminium",
-    "Glasswork",
-    "Grillwork",
-    "Shuttering",
-    "Formwork",
-    "False Ceiling",
-    "Paving",
-    "Landscaping",
-    "Compound Wall",
-    "Septic Tank",
-    "Overhead Tank",
-    "Underground Tank",
-    "Swimming Pool",
-    "Rainwater Harvesting",
-   
-  ];
-  const sand = [
-    "River Sand",
-    "Pit Sand",
-    "M Sand",
-    "Robo Sand",
-    "Quarry Dust",
-    "Crushed Stone Sand",
-    "Crushed Gravel Sand",
-    "Sea Sand",
-    "Slag Sand",
-    "Artificial Sand",
-    "Plastering Sand",
-    "Filter Sand",
-    "Bajri",
-    "Slag Sand",
-    "Artificial Sand",
-    "Plastering Sand",
-    "Filter Sand",
-    "Bajri",
-  ];
-  const bricks = [
-    "Brick",
-    "Block",
-    "Solid Block",
-    "Hollow Block",
-    "Solid Block",
-    "Hollow Block",
-  ];
-
-  const [structure, setStructure] = useState(structures[0]);
-  const [brick, setBrick] = useState(bricks[0]);
-  const [structureLength, setstructureLength] = useState(0);
-  const [structureHeight, setstructureHeight] = useState(0);
-  const [structureWidth, setstructureWidth] = useState(0);
-
-  const handleStructureChange = (value) => {
-    setStructure(value);
-  };
-
-  const handleLengthChange = (value) => {
-    setLength(value);
-  };
-
-  const handleHeightChange = (value) => {
-    setHeight(value);
-  };
-
-  const handleWidthChange = (value) => {
-    setWidth(value);
-  };
-  async function handlecalCulateMaterial() {
- // Assuming this code is inside an asynchronous function
-
-// Make a POST request
-const  response = await fetch("http://localhost:8000/quantities", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
+const structures = [
+  { structure: "Internal Wall", materials: ["Bricks/Block", "Mortar"] },
+  {
+    structure: "Concrete",
+    materials: ["Aggregate", "Sand", "Cement", "Water"],
   },
-  body: JSON.stringify({
-    structure: structure,
-    brick: brick,
-    length: structureLength,
-    height: structureHeight,
-    width: structureWidth,
-  }),
-});
+  { structure: "Mortar", materials: ["Cement", "Sand", "Water"] },
+  { structure: "Foundation", materials: ["Bricks/Blocks", "Mortar"] },
+  { structure: "Slab", materials: ["Aggregate", "Sand", "cement"] },
+];
 
-// Check if the POST request was successful
-if (response.ok) {
-  // Make a GET request after the POST request is completed
-  const brickData = await fetch("http://localhost:8000/quantities/calculate", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+// Replace this with your actual logic to fetch materials
+const fetchMaterials = (selectedStructure, dimensions) => {
+  // Mock data for demonstration purposes
+  const mockMaterials = [
+    { unit: "pcs", quantity: 12, rate: 250, total: 500 },
+    { unit: "kg", quantity: 10, rate: 3000, total: 150 },
+    { unit: "pcs", quantity: 10, rate: 50, total: 500 },
+    { unit: "kg", quantity: 5, rate: 30, total: 150 },
+    // Add more materials as needed
+  ];
+
+  return mockMaterials;
+};
+
+function QuantityCalculator() {
+  const [selectedStructure, setselectedStructure] = useState("");
+  // const [structure, setStructure] = useState();
+  const [mat, setMat] = useState("");
+  const [selectedMaterial, setselectedMaterial] = useState("");
+  const [brick, setBrick] = useState("");
+  const [structureLength, setstructureLength] = useState("");
+  const [structureHeight, setstructureHeight] = useState("");
+  const [structureWidth, setstructureWidth] = useState("");
+  const [calculatedQuantity, setCalculatedQuantity] = useState("");
+  const [brickDimensions, setBrickDimensions] = useState("");
+  const [brickLength, setBrickLength] = useState("");
+  const [brickWidth, setBrickWidth] = useState("");
+  const [brickHeight, setBrickHeight] = useState("");
+  const [dimensions, setDimensions] = useState({
+    length: 0,
+    height: 0,
+    width: 0,
   });
+  const [materials, setMaterials] = useState([]);
+  const [grandTotal, setGrandTotal] = useState(0);
 
-  // Check if the GET request was successful
-  if (brickData.ok) {
-    const data = await brickData.json();
-    console.log(data);
-  } else {
-    console.error("Failed to fetch brick data");
-  }
-} else {
-  console.error("Failed to make POST request");
-}
-
-console.log(structure);
-console.log(brick);
-console.log(structureLength);
-console.log(structureHeight);
-console.log(structureWidth);
-
+  const handleStructureChange = (event) => {
+    const structure = event.target.value;
+    setselectedStructure(structure);
+    // Reset dimensions and materials when structure changes
+    setDimensions({ length: 0, height: 0, width: 0 });
+    setMaterials([]);
   };
 
-  
+  const handleDimensionChange = (dimension, value) => {
+    setDimensions((prevDimensions) => ({
+      ...prevDimensions,
+      [dimension]: value,
+    }));
+  };
 
-  // Function to handle size input changes
+  const handleCalculate = () => {
+    // Perform calculations and update materialDetails and grandTotal
+    // You need to replace the following example calculations with your logic
+    // const calculatedDetails = structures
+    //   .find((structure) => structure.structure === selectedStructure)
+    //   ?.materials.map((material) => {
+    //     const quantity = calculateQuantity(material, dimensions);
+    //     const total = quantity * material.rate;
+    //     return {
+    //       material: material,
+    //       quantity: quantity,
+    //       total: total,
+    //     };
+    //   });
+
+    // Fetch materials data for the selected structure based on dimensions
+    // You may need to implement a function to fetch materials from your backend
+
+    // Example: Fetch materials based on selectedStructure and dimensions
+    const materialsData = fetchMaterials(selectedStructure, dimensions);
+
+    // Update materials state with the fetched data
+    setMaterials(materialsData);
+
+    // Calculate grand total
+    const total = materialsData.reduce(
+      (acc, material) => acc + material.total,
+      0
+    );
+    setGrandTotal(total);
+  };
+
+  async function handlecalCulateMaterial(req, res) {
+    const response = await fetch("http://localhost:8000/Quantities", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        structure: selectedStructure,
+        brick: brick,
+        length: dimensions.length,
+        height: dimensions.height,
+        width: dimensions.width,
+      }),
+    });
+
+    if (response.ok) {
+      // Parse the response JSON
+      const data = await response.json();
+
+      // Set the calculated quantity in state
+      setCalculatedQuantity(data.numberOfBricks);
+      setBrickDimensions(data.dimensions);
+      console.log(calculatedQuantity);
+      console.log(brickDimensions);
+    } else {
+      console.error("Failed to make POST request");
+    }
+
+    console.log(selectedStructure);
+    console.log(brick);
+    console.log(dimensions.length);
+    console.log(dimensions.height);
+    console.log(dimensions.width);
+  }
 
   return (
     <div className="mt-16 p-4 bg-gray-100 rounded-lg shadow-lg">
-      <h6>Hello here, welcome to </h6>
-      <select onChange={(e) => handleStructureChange(e.target.value)}>
-        <option value="Select Structure"> Select Structure</option>
-        {structures.map((structure, index) => (
-          <option key={index} value={structure}>
-            {structure}
-          </option>
-        ))}
-      </select>
-
+      <h1 className="text-xl mb-4">Let's get those quantities calculated</h1>
       <form>
-        <select onChange={(e) => setBrick(e.target.value)}>
-          <option value="Select Brick"> Select Material</option>
-          {bricks.map((brick, index) => (
-            <option key={index} value={brick}>
-              {brick}
+        {/* Add a dropdown for selecting structure */}
+        <select
+          onChange={handleStructureChange}
+          value={selectedStructure}
+          // ... other attributes
+        >
+          {/* Render options based on available structures */}
+          {structures.map((structure, index) => (
+            <option key={index} value={structure.structure}>
+              {structure.structure}
             </option>
           ))}
         </select>
+
+        {/* Render input fields for dimensions */}
         <div>
           <input
             type="text"
-            value={structureLength}
             placeholder="Length"
-            onChange={(e) => handleLengthChange(e.target.value)}
+            value={dimensions.length}
+            onChange={(e) => handleDimensionChange("length", e.target.value)}
           />
-          <input type="text" value={structureHeight} placeholder="Height" onChange={(e) => handleHeightChange(e.target.value)}/>
-          <input type="text" value={structureWidth} placeholder="Width"
-          onChange={(e) => handleWidthChange(e.target.value)} />
-          <button type="button" onClick={handlecalCulateMaterial}>Calculate</button>
+          <input
+            type="text"
+            placeholder="Height"
+            value={dimensions.height}
+            onChange={(e) => handleDimensionChange("height", e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Width"
+            value={dimensions.width}
+            onChange={(e) => handleDimensionChange("width", e.target.value)}
+          />
+          <button type="button" onClick={handlecalCulateMaterial}>
+            Calculate
+          </button>
         </div>
       </form>
+
+      {/* Display table with materials */}
+      <table>
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Unit</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* Map through materials of the selected structure to generate rows */}
+          {structures
+            .find((s) => s.structure === selectedStructure)
+            ?.materials.map((material, index) => (
+              <tr key={index}>
+                <td>{material}</td>
+                {/* Add logic here to fetch actual unit, quantity, rate, and total data */}
+                <td>
+                  {fetchMaterials(selectedStructure, dimensions)[index].unit}
+                </td>
+                <td>
+                  {
+                    fetchMaterials(selectedStructure, dimensions)[index]
+                      .quantity
+                  }
+                </td>
+                <td>
+                  {fetchMaterials(selectedStructure, dimensions)[index].rate}
+                </td>
+                <td>
+                  {fetchMaterials(selectedStructure, dimensions)[index].total}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="4">Grand Total</td>
+            <td>{grandTotal}</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }
 
-export default Quantities;
+export default QuantityCalculator;
