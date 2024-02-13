@@ -17,7 +17,11 @@ function Quantities() {
     updatedQuantities[index].quantity = value;
     updatedQuantities[index].total = value * updatedQuantities[index].price;
     setQuantities(updatedQuantities);
+
+    
   };
+
+  
 
   return (
     <div className="mt-16 p-4 bg-gray-100 rounded-lg shadow-lg">
