@@ -51,7 +51,7 @@ export default function AudioPlayer(props) {
   return (
     <div>
       <audio ref={audio}>
-        <source src="http://stream1.slowradio.com" type="audio/mp3" />
+        <source src="http://stream3.slowradio.com" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
       <button onClick={handleButtonClick}>{isPlaying ? "Pause" : "Play"}</button>
