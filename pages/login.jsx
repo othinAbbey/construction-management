@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import {Spinner} from "../components/spinner"
+// import {Spinner} from "../components/spinner"
+import Spinner from "@/components/spinner";
 
 function LoginPage() {
   const [loading, setLoading] = useState(false);
