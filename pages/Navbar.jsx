@@ -26,10 +26,7 @@ function Navbar() {
     </div>
 
 
-    <AudioPlayer
-          // src="http://stream1.slowradio.com"
-          
-        />
+    <AudioPlayer/>
      
 
 
