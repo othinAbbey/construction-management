@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react"; // Import useState for handling the menu state
+import AudioPlayer from "@/components/audioPlayer";
 
 const buttons = [
   { text: "Home", link: "/" },
@@ -9,19 +10,29 @@ const buttons = [
   { text: "Admin", link: "/admin" },
   { text: "LogOut", link: "/logout" },
   { text: "Create Acoount", link: "/newaccount" },
-
-
-  
 ];
 
-function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false); // State to track menu open/close
 
+function Navbar() {
+ 
+  const [menuOpen, setMenuOpen] = useState(false); // State to track menu open/close
+ 
+
+  
   return (
     <nav className="bg-blue-500 p-4 flex items-center justify-between fixed top-0 right-0 w-full z-10 ">
       <div className="text-white">
         <img src="./logo.jpg" alt="Logo" />
     </div>
+
+
+    <AudioPlayer
+          src="http://stream1.slowradio.com"
+          
+        />
+     
+
+
 
       {/* Toggle the menu button for smaller screens */}
       <button
@@ -59,3 +70,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

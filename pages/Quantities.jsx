@@ -129,7 +129,11 @@ function QuantityCalculator() {
     console.log(dimensions.length);
     console.log(dimensions.height);
     console.log(dimensions.width);
+
+    
   }
+
+  
 
   return (
     <div className="mt-16 p-4 bg-gray-100 rounded-lg shadow-lg">
