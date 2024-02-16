@@ -28,7 +28,7 @@ const playAudio = () => {
   return (
     <div>
       <audio ref={audio} >
-        <source src={props.src} type="audio/mp3" />
+        <source src={"http://stream1.slowradio.com"} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
       <button onClick={playAudio}>{isPlaying ? "Play":"Pause"}</button>
