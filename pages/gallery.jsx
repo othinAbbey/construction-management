@@ -1,268 +1,169 @@
+"use client";
 
-// import { useEffect, useState } from "react";
-// import Navbar from "./Navbar";
-// import Footer from "./Footer";
-
-// function Gallery() {
-//   const images = [
-//     { src: "/assets/strf1.jpeg", title: "Steel Structure", category: "Fabrication" },
-//     { src: "/assets/strf2.jpeg", title: "Bridge Works", category: "Infrastructure" },
-//     { src: "/assets/strf3.jpeg", title: "Site Installation", category: "Construction" },
-//     { src: "/assets/strf14.jpeg", title: "Welding Works", category: "Steel Works" },
-//     { src: "/assets/strf15.jpeg", title: "Structural Steel", category: "Fabrication" },
-//     { src: "/assets/strf16.jpeg", title: "Heavy Lifting", category: "Construction" },
-//     { src: "/assets/strf17.jpeg", title: "Project Management", category: "Planning" },
-//     { src: "/assets/strf18.jpeg", title: "Remote Site", category: "Logistics" },
-//     { src: "/assets/strf19.jpeg", title: "Upcountry Project", category: "Development" },
-//     { src: "/assets/strf31.jpeg", title: "Project Timeline", category: "Scheduling" },
-//     { src: "/assets/strf32.jpeg", title: "Safety Measures", category: "Safety" },
-//     { src: "/assets/strf35.jpeg", title: "Material Handling", category: "Logistics" },
-//     { src: "/assets/strf36.jpeg", title: "Site Survey", category: "Planning" },
-//     { src: "/assets/strf37.jpeg", title: "Construction Progress", category: "Monitoring" },
-//     { src: "/assets/strf38.jpeg", title: "Project Collaboration", category: "Teamwork" },
-//     { src: "/assets/strf39.jpeg", title: "Remote Management", category: "Remote Work" },
-//     { src: "/assets/strf41.jpeg", title: "Upcountry Development", category: "Development" },
-//     { src: "/assets/strf43.jpeg", title: "Construction Site", category: "Construction" },
-//     { src: "/assets/strf44.jpeg", title: "Project Planning", category: "Planning" },
-//     { src: "/assets/strf45.jpeg", title: "Safety Protocols", category: "Safety" },
-//     { src: "/assets/strf46.jpeg", title: "Material Logistics", category: "Logistics" },
-//     { src: "/assets/strf48.jpeg", title: "Site Inspection", category: "Monitoring" },
-//     { src: "/assets/strf50.jpeg", title: "Construction Teamwork", category: "Collaboration" },
-//     { src: "/assets/strf121.jpeg", title: "Remote Site Management", category: "Remote Work" },
-//     { src: "/assets/strf33.jpeg", title: "Upcountry Project Development", category: "Development" },
-//     { src: "/assets/strf34.jpeg", title: "Construction Progress", category: "Monitoring" },
-//   ];
-
-//   const [loaded, setLoaded] = useState(false);
-
-//   useEffect(() => {
-//     setLoaded(true);
-//   }, []);
-
-//   return (
-//     <div className="bg-gray-100 min-h-screen flex flex-col">
-
-//       <Navbar />
-
-//       {/* HEADER */}
-//       <div className="text-center py-8 sm:py-10 px-4">
-//         <h1 className="text-2xl sm:text-3xl font-bold">
-//           Project Gallery
-//         </h1>
-//         <p className="text-sm sm:text-base text-gray-600 mt-2">
-//           Showcasing our construction and engineering projects
-//         </p>
-//       </div>
-
-//       {/* GRID */}
-//       <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 mb-16">
-
-//         <div className="
-//           grid
-//           grid-cols-1
-//           sm:grid-cols-2
-//           md:grid-cols-3
-//           lg:grid-cols-4
-//           gap-3 sm:gap-4
-//         ">
-
-//           {images.map((img, index) => (
-//             <div
-//               key={index}
-//               className={`
-//                 bg-white shadow rounded overflow-hidden
-//                 transform transition-all duration-700 ease-out
-//                 hover:scale-105 hover:shadow-xl
-//                 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-//               `}
-//               style={{
-//                 transitionDelay: `${index * 60}ms`,
-//               }}
-//             >
-
-//               <img
-//                 src={img.src}
-//                 alt={img.title}
-//                 className="
-//                   w-full
-//                   h-40 sm:h-44 md:h-48
-//                   object-cover
-//                   transition-transform duration-500
-//                   hover:scale-110
-//                 "
-//                 loading="lazy"
-//               />
-
-//               <div className="p-2 sm:p-3">
-//                 <p className="font-semibold text-xs sm:text-sm">
-//                   {img.title}
-//                 </p>
-//                 <p className="text-[10px] sm:text-xs text-gray-500">
-//                   {img.category}
-//                 </p>
-//               </div>
-
-//             </div>
-//           ))}
-
-//         </div>
-//       </div>
-
-
-
-//     </div>
-//   );
-// }
-
-// export default Gallery;
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+export default function Gallery() {
+  const categories = [
+    {
+      id: "steel",
+      title: "Steel Construction",
+      folder: "/assets/steel-projects",
+      projects: [
+        {
+          image: "strf1.jpeg",
+          title: "Warehouse Steel Structure",
+          description:
+            "Fabrication and installation of large-scale steel warehouse frame.",
+          location: "Central Uganda",
+        },
+        {
+          image: "strf2.jpeg",
+          title: "Industrial Roofing System",
+          description:
+            "Roofing system installation for commercial storage facility.",
+          location: "Kampala",
+        },
+        {
+          image: "strf3.jpeg",
+          title: "Steel Frame Construction",
+          description:
+            "Structural steel framework for multi-purpose building.",
+          location: "Entebbe",
+        },
+      ],
+    },
 
-function Gallery() {
-  const images = [
-        { src: "/assets/strf1.jpeg", title: "Steel Structure", category: "Fabrication" },
-    { src: "/assets/strf2.jpeg", title: "Bridge Works", category: "Infrastructure" },
-    { src: "/assets/strf3.jpeg", title: "Site Installation", category: "Construction" },
-    { src: "/assets/strf14.jpeg", title: "Welding Works", category: "Steel Works" },
-    { src: "/assets/strf15.jpeg", title: "Structural Steel", category: "Fabrication" },
-    { src: "/assets/strf16.jpeg", title: "Heavy Lifting", category: "Construction" },
-    { src: "/assets/strf17.jpeg", title: "Project Management", category: "Planning" },
-    { src: "/assets/strf18.jpeg", title: "Remote Site", category: "Logistics" },
-    { src: "/assets/strf19.jpeg", title: "Upcountry Project", category: "Development" },
-    { src: "/assets/strf31.jpeg", title: "Project Timeline", category: "Scheduling" },
-    { src: "/assets/strf32.jpeg", title: "Safety Measures", category: "Safety" },
-    { src: "/assets/strf35.jpeg", title: "Material Handling", category: "Logistics" },
-    { src: "/assets/strf36.jpeg", title: "Site Survey", category: "Planning" },
-    { src: "/assets/strf37.jpeg", title: "Construction Progress", category: "Monitoring" },
-    { src: "/assets/strf38.jpeg", title: "Project Collaboration", category: "Teamwork" },
-    { src: "/assets/strf39.jpeg", title: "Remote Management", category: "Remote Work" },
-    { src: "/assets/strf41.jpeg", title: "Upcountry Development", category: "Development" },
-    { src: "/assets/strf43.jpeg", title: "Construction Site", category: "Construction" },
-    { src: "/assets/strf44.jpeg", title: "Project Planning", category: "Planning" },
-    { src: "/assets/strf45.jpeg", title: "Safety Protocols", category: "Safety" },
-    { src: "/assets/strf46.jpeg", title: "Material Logistics", category: "Logistics" },
-    { src: "/assets/strf48.jpeg", title: "Site Inspection", category: "Monitoring" },
-    { src: "/assets/strf50.jpeg", title: "Construction Teamwork", category: "Collaboration" },
-    { src: "/assets/strf121.jpeg", title: "Remote Site Management", category: "Remote Work" },
-    { src: "/assets/strf33.jpeg", title: "Upcountry Project Development", category: "Development" },
-    { src: "/assets/strf34.jpeg", title: "Construction Progress", category: "Monitoring" },
-
+    {
+      id: "water",
+      title: "Water Projects",
+      folder: "/assets/water-projects",
+      projects: [
+        {
+          image: "psp.JPG",
+          title: "Borehole Motorisation System",
+          description:
+            "Successfully motorised 2 boreholes feeding a 100m³ storage tank for continuous water supply.",
+          location: "Northern Uganda",
+        },
+        {
+          image: "Motorised borehole.JPG",
+          title: "Automated Borehole Upgrade",
+          description:
+            "Installed pumping automation system improving water distribution efficiency.",
+          location: "Gulu District",
+        },
+        {
+          image: "solar station.JPG",
+          title: "Solar Water Pumping System",
+          description:
+            "Solar-powered pumping station reducing operational costs and improving sustainability.",
+          location: "Lira District",
+        },
+        {
+          image: "Inspection chamber.JPG",
+          title: "Water Distribution Network",
+          description:
+            "Inspection chamber and pipeline system for community water distribution.",
+          location: "Arua",
+        },
+      ],
+    },
   ];
 
-  const [loaded, setLoaded] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+  const [active, setActive] = useState("steel");
+  const activeCategory = categories.find((c) => c.id === active);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
 
       <Navbar />
 
       {/* HEADER */}
-      <div className="text-center py-8 sm:py-10 px-4">
-        <h1 className="text-2xl sm:text-3xl font-bold">
+      <div className="text-center pt-24 pb-10 px-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
           Project Gallery
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-2">
-          Click any image to view full size
+        <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+          A showcase of completed infrastructure projects across Uganda —
+          steel structures, water systems, and civil engineering works.
         </p>
       </div>
 
-      {/* GRID */}
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 mb-16">
+      {/* TABS */}
+      <div className="flex justify-center flex-wrap gap-3 mb-10 px-4">
 
-        <div className="
-          grid 
-          grid-cols-1 
-          sm:grid-cols-2 
-          md:grid-cols-3 
-          lg:grid-cols-4 
-          gap-3 sm:gap-4
-        ">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActive(cat.id)}
+            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border
+              ${
+                active === cat.id
+                  ? "bg-black text-white border-black shadow-lg scale-105"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-black hover:text-black"
+              }
+            `}
+          >
+            {cat.title}
+          </button>
+        ))}
 
-          {images.map((img, index) => (
-            <div
-              key={index}
-              onClick={() => setSelectedImage(img)}
-              className={`
-                bg-white shadow rounded overflow-hidden cursor-pointer
-                transform transition-all duration-700 ease-out
-                hover:scale-105 hover:shadow-xl
-                ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-              `}
-              style={{
-                transitionDelay: `${index * 60}ms`,
-              }}
-            >
-
-              <img
-                src={img.src}
-                alt={img.title}
-                className="
-                  w-full 
-                  h-40 sm:h-44 md:h-48 
-                  object-cover 
-                  transition-transform duration-500 
-                  hover:scale-110
-                "
-                loading="lazy"
-              />
-
-              <div className="p-2 sm:p-3">
-                <p className="font-semibold text-xs sm:text-sm">
-                  {img.title}
-                </p>
-                <p className="text-[10px] sm:text-xs text-gray-500">
-                  {img.category}
-                </p>
-              </div>
-
-            </div>
-          ))}
-
-        </div>
       </div>
 
-      {/* 🔥 FULLSCREEN MODAL */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="max-w-4xl w-full relative">
+      {/* GRID */}
+      <div className="max-w-7xl mx-auto px-4 pb-20 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
 
-            {/* CLOSE BUTTON */}
-            <button
-              className="absolute top-2 right-2 bg-white text-black px-3 py-1 rounded"
-              onClick={() => setSelectedImage(null)}
-            >
-              ✕
-            </button>
+        {activeCategory.projects.map((project, index) => (
+          <div
+            key={index}
+            className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+          >
 
             {/* IMAGE */}
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.title}
-              className="w-full max-h-[80vh] object-contain rounded"
-            />
+            <div className="overflow-hidden">
+              <img
+                src={`${activeCategory.folder}/${project.image}`}
+                alt={project.title}
+                className="h-56 w-full object-cover group-hover:scale-110 transition duration-500"
+              />
+            </div>
 
-            {/* INFO */}
-            <div className="text-center text-white mt-3">
-              <p className="font-semibold">{selectedImage.title}</p>
-              <p className="text-sm text-gray-300">{selectedImage.category}</p>
+            {/* CONTENT */}
+            <div className="p-4">
+
+              <h3 className="text-sm font-bold text-gray-800">
+                {project.title}
+              </h3>
+
+              <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                {project.description}
+              </p>
+
+              <p className="text-xs text-blue-600 mt-3 font-medium">
+                📍 {project.location}
+              </p>
+
             </div>
 
           </div>
-        </div>
-      )}
+        ))}
 
+      </div>
+
+      {/* FOOTER STRIP */}
+      <div className="bg-black text-white py-10 text-center">
+
+        <h2 className="text-xl font-bold text-yellow-400">
+          C & A Contractors Limited
+        </h2>
+
+        <p className="text-gray-300 text-sm mt-2">
+          Delivering reliable infrastructure across Uganda
+        </p>
+
+      </div>
     </div>
+   
   );
 }
-
-export default Gallery;
