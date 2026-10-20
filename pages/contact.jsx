@@ -1,8 +1,7 @@
 "use client";
 
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 import { useState } from "react";
+import { api } from "../lib/pm";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -10,24 +9,37 @@ export default function Contact() {
     email: "",
     phone: "",
     message: "",
+    website: "", // hidden spam trap: real visitors never fill it
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [status, setStatus] = useState({ kind: "", text: "" });
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message submitted successfully (connect backend later)");
+    setSending(true);
+    setStatus({ kind: "", text: "" });
+    try {
+      await api("/api/contact", { method: "POST", auth: false, body: form });
+      setStatus({ kind: "ok", text: "Thank you. Your message has been received and we will reply soon." });
+      setForm({ name: "", email: "", phone: "", message: "", website: "" });
+    } catch (err) {
+      setStatus({ kind: "error", text: err.message });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
     <div className="bg-gray-100 min-h-screen">
 
-      <Navbar />
 
       {/* HERO */}
-      <div className="pt-28 text-center px-4">
+      <div className="pt-12 text-center px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
           Contact Us
         </h1>
@@ -48,7 +60,9 @@ export default function Contact() {
           <input
             type="text"
             name="name"
+            required
             placeholder="Your Name"
+            value={form.name}
             onChange={handleChange}
             className="w-full p-3 border rounded"
           />
@@ -56,7 +70,9 @@ export default function Contact() {
           <input
             type="email"
             name="email"
+            required
             placeholder="Your Email"
+            value={form.email}
             onChange={handleChange}
             className="w-full p-3 border rounded"
           />
@@ -65,23 +81,37 @@ export default function Contact() {
             type="text"
             name="phone"
             placeholder="Phone Number"
+            value={form.phone}
             onChange={handleChange}
             className="w-full p-3 border rounded"
           />
 
           <textarea
             name="message"
+            required
+            minLength={5}
             placeholder="Your Message"
             rows="5"
+            value={form.message}
             onChange={handleChange}
             className="w-full p-3 border rounded"
           />
 
+          {/* hidden spam trap */}
+          <input type="text" name="website" value={form.website} onChange={handleChange} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+
+          {status.text && (
+            <div className={`p-3 rounded text-sm text-left ${status.kind === "ok" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
+              {status.text}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition"
+            disabled={sending}
+            className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition disabled:opacity-50"
           >
-            Send Message
+            {sending ? "Sending..." : "Send Message"}
           </button>
 
         </form>
@@ -120,7 +150,6 @@ export default function Contact() {
 
       </div>
 
-      <Footer />
     </div>
   );
 }

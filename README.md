@@ -1,83 +1,52 @@
-## Overview
+# canda-frontend
 
-Welcome to the Construction Project Management Web Application! This application is designed to assist construction professionals and enthusiasts in managing their projects effectively by providing features to search for materials, access price information, and calculate the materials needed based on their project's location. Whether you are a contractor, architect, or DIY enthusiast, this tool will streamline your construction project planning and execution.
+The C & A Contractors website and apps (Next.js 13 pages router + Tailwind). It is a **separate project**: it talks to one
+thing only, the C & A API (`canda-api`), over HTTP. It never connects to a database or to the BOQ service directly.
 
-## Features
+## Run it
 
-1. Material Search
-   Search Engine: Easily search for construction materials by name, type, or specific attributes.
-   Detailed Information: Access detailed information about each material, including specifications, suppliers, and user reviews.
-   Compare Prices: Compare prices from multiple suppliers to find the best deals.
-   Favorites: Save your favorite materials for quick access.
-2. Price Information
-   Real-Time Pricing: Get up-to-date pricing information from various suppliers.
-   Price History: View historical price trends for specific materials.
-   Supplier Ratings: Check supplier ratings and reviews to make informed decisions.
-3. Materials Calculator
-   Project Details: Input project details, such as location, dimensions, and materials required.
-   Location-Based Calculations: Calculate materials needed based on your project's location, considering factors like weather and local regulations.
-   Cost Estimation: Estimate the overall cost of materials for your project.
-   Getting Started
-   To get started with the Construction Project Management Web Application, follow these steps:
+    npm install
+    copy .env.local.example .env.local      # macOS/Linux: cp .env.local.example .env.local   (set the API address)
+    npm run dev                             # http://localhost:3000
 
-Clone the Repository: Clone this repository to your local machine.
+`NEXT_PUBLIC_API_URL` is the only setting. The API must allow this site's address in its `CORS_ORIGINS`.
+Production: `npm run build && npm start`, or deploy to any host that runs Next.js (Netlify, Vercel...).
 
-`git clone https://github.com/your-username/construction-project-management.git`
+## Pages
 
-## Install Dependencies:
+| Area | Pages |
+|---|---|
+| Public site | `/`, `/about`, `/services`, `/gallery`, `/contact` (messages go to the API inbox) |
+| Accounts | `/pm/login` (sign in, create account), `/pm/reset`, `/pm/team` (password, and admin user management) |
+| Project manager | `/pm` dashboard, `/pm/projects` and `/pm/projects/:id` (one page per project), tasks, schedule, budget, site logs, issues, documents, summary |
+| Material sourcing | `/pm/sourcing`, `/pm/suppliers`, `/pm/calculator`, `/pm/contribute` (suggest additions) |
+| BOQ | `/boq` (your own jobs, saved to your account) |
+| Admin | `/pm/approvals`, `/pm/audit`, `/pm/inbox`, `/pm/billing` (placeholder) |
 
-Navigate to the project directory and install the required dependencies.
+## How it is organised
 
-`cd construction-project-management
-npm install
-`
+    lib/pm.js            the ONLY place that calls the API (api(), useApi(), usePM(), session, can())
+    lib/boqApi.js        BOQ calls (also through the API)
+    lib/csv.js           CSV export helper
+    components/pm/       reusable building blocks:
+        ui.jsx           Shell (sidebar, rights-aware menu), Card, Panel, Field, Select, Form, Table...
+        ResourcePage     one config-driven list page: search, sort, CSV, add, edit, delete  (projects, tasks, costs, logs, issues)
+        DataTable        the list itself            EditDialog   edit one record
+        ProjectSummary   the project report         FilesPanel   documents of a project
+        LocationPick     region + district picker
+    pages/               thin: each page is configuration plus these components
+    legacy/              the original prototype screens, kept for reference (not built)
 
-## Configuration:
+## Rights
 
-Configure the application with your database credentials, API keys, and other environment-specific settings. Refer to the config.example.js file for guidance.
+The menu and buttons follow `user.permissions` from `GET /api/me` (`can(user, "catalog:write")`). The website never decides who may do what;
+the API enforces every right and this only hides what you cannot use. To change rights, edit the API's `src/auth/permissions.js`.
 
-## Run the Application:
+## Add a list page in a few lines
 
-Start the web application.
-`npx run dev
-`
+    // pages/pm/mylist.jsx  (after adding the resource to the API)
+    <ResourcePage resource="costs" title="My list" fields={({ d, projectId }) => [...]} columns={({ nameOf }) => [...]} searchKeys={["item"]} />
 
-## Access the Application:
+## Not tested in a browser here
 
-Open your web browser and access the application at http://localhost:3000 (or the specified port).
-
-## Technologies Used
-
-### Frontend:
-
-HTML5
-CSS3
-JavaScript
-Next.js
-Redux for state management
-fetch for API requests
-
-### Backend:
-
-Node.js
-Express.js
-MongoDB for database storage
-External APIs:
-Material Search API
-Supplier Pricing API
-Location-based Data API
-
-### Deployment:
-
-Hosted on netlift
-Contributors
-Onyango Abbey - Project Lead
-Onyango ABbey - Frontend Developer
-Onyango Abbey- Backend Developer
-Onyango Abbey - UX/UI Designer
-Moses Atia -Feedback and Support
-
-If you encounter any issues, have suggestions, or need assistance, please feel free to create an issue on our GitHub repository. We appreciate your feedback and are here to help!
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+The code passes syntax and undefined-name checks. Run `npm run dev` and click through each page once after installing.

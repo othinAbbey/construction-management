@@ -1,16 +1,13 @@
 "use client";
 
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 
 export default function About() {
   return (
     <div className="bg-gray-100 min-h-screen">
 
-      <Navbar />
 
       {/* HERO */}
-      <div className="pt-28 text-center px-4">
+      <div className="pt-12 text-center px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
           About C & A Contractors Limited
         </h1>

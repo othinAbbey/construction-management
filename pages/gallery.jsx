@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 export default function Gallery() {
   const categories = [
     {
@@ -77,10 +75,9 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
 
-      <Navbar />
 
       {/* HEADER */}
-      <div className="text-center pt-24 pb-10 px-4">
+      <div className="text-center pt-12 pb-10 px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
           Project Gallery
         </h1>
