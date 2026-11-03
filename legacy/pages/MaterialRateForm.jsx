@@ -1,0 +1,386 @@
+import React, { useState } from "react";
+
+function MaterialRateForm() {
+  const regions = [
+    {
+      name: "Central",
+      districts: [
+        "Buikwe",
+        "Bukomansimbi",
+        "Butambala",
+        "Buvuma",
+        "Gomba",
+        "Kalangala",
+        "Kalungu",
+        "Kayunga",
+        "Kiboga",
+        "Kyankwanzi ",
+        "Kyotera",
+        "Mubende",
+        "Nakaseke",
+        "Rakai",
+        "Sembabule",
+        "Mpigi",
+        "Mityana",
+        "Masaka",
+        "Lyantonde",
+        "Lwengo",
+        "Wakiso",
+        "Kampala",
+        "Mukono",
+        "Luwero",
+        "Mityana",
+      ],
+    },
+    {
+      name: "Eastern",
+      districts: [
+        "Tororo",
+        "Soroti",
+        "Sironko",
+        "Serere",
+        "Paliisa",
+        "Ngora",
+        "Namutumba",
+        "Namisindwa",
+        "Namayingo",
+        "Mbale",
+        "Mayuge",
+        "Manafwa",
+        "Luuka",
+        "Kween",
+        "Kumi",
+        "Kibuku",
+        "Katakwi",
+        "Kapchorwa",
+        "Kamuli",
+        "Kaliro",
+        "Kaberamaido",
+        "Jinja",
+        "Iganga",
+        "Buyende",
+        "Butebo",
+        "Butaleja",
+        "Busia",
+        "Bulambuli",
+        "Bukwo",
+        "Bukedea",
+        "Bugiri",
+        "Bududa",
+        "Budaka",
+        "Amuria",
+      ],
+    },
+    {
+      name: "Western",
+      districts: [
+        "Buhweju",
+        "Bulisa",
+        "Bundibugyo",
+        "Bushenyi",
+        "Hoima",
+        "Ibanda",
+        "Isingiro",
+        "Kabale",
+        "Kabarole",
+        "Kamwenge",
+        "Kanungu",
+        "Kasese",
+        "Kibaale",
+        "Kiruhura",
+        "Kiryandongo",
+        "Kisoro",
+        "Kyegegwa",
+        "Kyenjojo",
+        "Masindi",
+        "Mbarara",
+        "Mitooma",
+        "Ntoroko",
+        "Ntungamo",
+        "Rubirizi",
+        "Rukungiri",
+        "Sheema",
+      ],
+    },
+    {
+      name: "Northern",
+      districts: [
+        ,
+        "Abim",
+        "Adjumani",
+        "Agago",
+        "Alebtong",
+        "Amolatar",
+        "Amudat",
+        "Amuru",
+        "Apac",
+        "Arua",
+        "Dokolo",
+        "Gulu",
+        "Kaabong",
+        "Kitgum",
+        "Koboko",
+        "Kole",
+        "Kotido",
+        "Lamwo",
+        "Lira",
+        "Maracha",
+        "Moroto",
+        "Moyo",
+        "Nakapiripirit",
+        "Napak",
+        "Nebbi",
+        "Nwoya",
+        "Otuke",
+        "Oyam",
+        "Pader",
+        "Yumbe",
+        "Zombo",
+      ],
+    },
+    // Add more regions with their respective districts
+  ];
+
+  const materials = [
+    { name: "Bricks", type: "Cement", unit: "pcs", price: 1000 },
+    {
+      name: "Blocks",
+      type: "Solid",
+      size: "100 X 200 X 400",
+      unit: "pcs",
+      price: 2000,
+    },
+    {
+      name: "Solid Blocks",
+      type: "Solid",
+      size: "200 X 200 X 400",
+      unit: "pcs",
+      price: 3000,
+    },
+    {
+      name: "Hollow Blocks",
+      type: "Hollow",
+      size: "200 X 200 X 400",
+      unit: "pcs",
+      price: 4000,
+    },
+    {
+      name: "Solid Blocks",
+      type: "Hollow",
+      size: "150 X 200 X 400",
+      unit: "pcs",
+      price: 5000,
+    },
+    { name: "Cement", type: "Cement", unit: "bags", price: 6000 },
+    { name: "Sand", type: "Sand", unit: "trucks", price: 7000 },
+    { name: "Aggregate", type: "Aggregate", unit: "trucks", price: 8000 },
+    { name: "Iron Bars", type: "Iron Bars", unit: "bars", price: 9000 },
+    {
+      name: "Roofing Sheets",
+      type: "Roofing Sheets",
+      unit: "sheets",
+      price: 10000,
+    },
+    { name: "Timber", type: "Timber", unit: "cubic meters", price: 11000 },
+    { name: "Tiles", type: "Tiles", unit: "boxes", price: 12000 },
+    { name: "Paint", type: "Paint", unit: "buckets", price: 13000 },
+    { name: "Windows", type: "Windows", unit: "windows", price: 15000 },
+    { name: "Pipes", type: "Pipes", unit: "pipes", price: 16000 },
+    // ... other unique materials
+  ];
+  //Variables for Material search
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+  const [showTable, setShowTable] = useState(false);
+  const [addMaterial, setAddMaterial] = useState(false);
+
+  // variables for material add
+  const [selectedRegion2, setSelectedRegion2] = useState("");
+  const [selectedDistrict2, setSelectedDistrict2] = useState("");
+  const [selectedMaterial2, setSelectedMaterial2] = useState("");
+  const [showTable2, setShowTable2] = useState(false);
+  const [description, setDescription] = useState("");
+  const [rate, setRate] = useState("");
+
+  const handleRegionChange = (event, formNumber) => {
+    const region = event.target.value;
+    if (formNumber === 1) {
+      setSelectedRegion(region);
+      setSelectedDistrict("");
+      setSelectedMaterial("");
+      setShowTable(false);
+    } else if (formNumber === 2) {
+      setSelectedRegion2(region);
+      setSelectedDistrict2("");
+      setSelectedMaterial2("");
+      setShowTable2(false);
+    }
+  };
+
+  const handleMaterialChange = (event, formNumber) => {
+    const material = event.target.value;
+    setSelectedMaterial2(material);
+    if (formNumber === 1) {
+      setSelectedMaterial(material);
+      setShowTable(true);
+    } else if (formNumber === 2) {
+      setSelectedMaterial2(material);
+      setShowTable2(true);
+    }
+  };
+
+  const handleDistrictChange = (event, formNumber) => {
+    const district = event.target.value;
+    if (formNumber === 1) {
+      setSelectedDistrict(district);
+      setSelectedMaterial("");
+      setShowTable(false);
+    } else if (formNumber === 2) {
+      setSelectedDistrict2(district);
+      setSelectedMaterial2("");
+      setShowTable2(false);
+    }
+  };
+
+  const handleSubmit = (event, formNumber) => {
+    event.preventDefault();
+    // Handle form submission if needed
+    // For now, you can update the state to show the table
+    if (formNumber === 1) {
+      setShowTable(true);
+    } else if (formNumber === 2) {
+      setShowTable2(true);
+    }
+  };
+
+  const handleAddMaterial = async () => {
+    const response = await fetch("http://localhost:8000/materials/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        material: selectedMaterial2,
+        description,
+        rate,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    try {
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        // Log or handle the error
+        console.error(`Server error: ${response.statusText}`);
+      }
+    } catch (err) {
+      // Log the parsing error
+      console.error(err);
+
+      // If the response status is not OK, log the response text
+      if (!response.ok) {
+        const responseText = await response.text();
+        console.log(responseText);
+      }
+    }
+  };
+
+  return (
+    <div className="mt-16 p-4 container mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-8">
+        Your one-stop center for materials near you
+      </h1>
+      {/* Searching materials */}
+      <div className="max-w-md mx-auto">
+        <h2 className="text-xl mb-4">Fill in the form to get started</h2>
+        <form onSubmit={(event) => handleSubmit(event, 1)}>
+          <select
+            className="w-1/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
+            onChange={(event) => handleRegionChange(event, 1)}
+            value={selectedRegion}
+          >
+            <option value="Select Region">Select Region</option>
+            {regions.map((region, index) => (
+              <option key={index} value={region.name}>
+                {region.name}
+              </option>
+            ))}
+          </select>
+
+          {selectedRegion && (
+            <select
+              onChange={(event) => handleDistrictChange(event, 1)}
+              value={selectedDistrict}
+              className="w-1/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
+            >
+              <option value="Select District">Select District</option>
+              {regions
+                .find((region) => region.name === selectedRegion)
+                ?.districts.map((district, index) => (
+                  <option key={index} value={district}>
+                    {district}
+                  </option>
+                ))}
+            </select>
+          )}
+
+          {selectedDistrict && (
+            <select
+              onChange={(event) => handleMaterialChange(event, 1)}
+              value={selectedMaterial}
+              className="w-1/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
+            >
+              <option value="Select Material">Select Material</option>
+              {materials.map((material, index) => (
+                <option key={index} value={material.name}>
+                  {material.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {showTable && selectedMaterial && (
+            <table className="mt-4 border-collapse border border-gray-600">
+              <thead>
+                <tr>
+                  <th className="border border-gray-600 p-2">Material</th>
+                  <th className="border border-gray-600 p-2">Type</th>
+                  <th className="border border-gray-600 p-2">Unit</th>
+                  <th className="border border-gray-600 p-2">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {materials.map(
+                  (material, index) =>
+                    material.name === selectedMaterial && (
+                      <tr key={index} className="border border-gray-600">
+                        <td className="border border-gray-600 p-2">
+                          {material.name}
+                        </td>
+                        <td className="border border-gray-600 p-2">
+                          {material.type}
+                        </td>
+                        <td className="border border-gray-600 p-2">
+                          {material.unit}
+                        </td>
+                        <td className="border border-gray-600 p-2">
+                          {material.price}
+                        </td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+            </table>
+          )}
+
+          {/* Add other form elements for material selection and other details */}
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default MaterialRateForm;
