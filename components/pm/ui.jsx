@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import PasswordField from "./PasswordField";
 import Head from "next/head";
 import { Logo } from "../Brand";
+import Assistant from "./Assistant";
 import { api, can, getToken, getUser, setUser as setUserStore } from "../../lib/pm";
 
 /** [label, href, permission needed (optional)]. The server decides who has which permission; see /api/me. */
 const NAV = [
-  ["Overview", [["/pm", "Dashboard"], ["/pm/summary", "Project Summary", "projects:read"]]],
+  ["Overview", [["/pm", "Dashboard"], ["/pm/chat", "Site Chat", "chat:use"], ["/pm/summary", "Project Summary", "projects:read"]]],
   ["Projects", [["/pm/projects", "Projects", "projects:read"], ["/pm/tasks", "Tasks", "projects:read"], ["/pm/schedule", "Schedule", "projects:read"],
     ["/pm/budget", "Budget & Costs", "projects:read"], ["/pm/logs", "Site Logs", "projects:read"], ["/pm/issues", "Issues & RFIs", "projects:read"],
     ["/pm/forms", "Site Forms", "projects:read"], ["/pm/files", "Documents", "files:read"]]],
@@ -24,6 +25,7 @@ const NAV = [
 export function Shell({ title, children, error, actions }) {
   const { pathname } = useRouter();
   const [user, setUser] = useState(null);
+  const [menu, setMenu] = useState(false);
   useEffect(() => {
     if (!getToken()) { window.location.href = `/pm/login?next=${encodeURIComponent(window.location.pathname)}`; return; }
     setUser(getUser());
@@ -37,37 +39,52 @@ export function Shell({ title, children, error, actions }) {
     <div className="flex flex-col md:flex-row md:min-h-[calc(100vh-4.5rem)]">
       <Head><title>{user?.organization?.name ? `${title} · ${user.organization.name}` : title}</title></Head>
       <aside className="md:w-60 md:shrink-0 bg-gray-900 text-gray-200 p-3 md:py-5 print:hidden">
+        {/* Phones: one bar with the company and a Menu button; the pages open below it. Larger screens: the full sidebar. */}
+        <div className="flex items-center justify-between gap-3 md:hidden">
+          <div className="flex min-w-0 items-center gap-2">
+            {user?.organization && <Logo org={user.organization} size="h-7 w-7" />}
+            <div className="min-w-0 truncate text-sm font-semibold text-white">{user?.organization?.name || "Workspace"}</div>
+          </div>
+          <button onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Workspace menu"
+            className="flex shrink-0 items-center gap-2 rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-white">
+            <span aria-hidden="true">{menu ? "✕" : "☰"}</span>{menu ? "Close" : "Menu"}
+          </button>
+        </div>
         {user?.organization && (
           <div className="hidden md:flex items-center gap-2 px-3 pb-4 mb-3 border-b border-gray-800">
             <Logo org={user.organization} size="h-8 w-8" />
             <div className="text-sm font-semibold text-white leading-tight break-words min-w-0">{user.organization.name}</div>
           </div>
         )}
-        <div className="flex md:flex-col gap-x-1 gap-y-3 overflow-x-auto md:overflow-visible">
+        <nav className={`${menu ? "grid" : "hidden"} mt-3 grid-cols-2 gap-x-2 gap-y-3 md:mt-0 md:flex md:flex-col`}>
           {NAV.map(([group, items]) => {
             const shown = items.filter(([, , need]) => !need || can(user, need) || user?.role === "admin");   // the Administrator sees every page
             if (!shown.length) return null;
             return (
-              <div key={group} className="flex md:block items-center gap-1 shrink-0">
-                <div className="hidden md:block px-3 pb-1 text-[11px] uppercase tracking-wider text-gray-500">{group}</div>
-                {shown.map(([href, label]) => (
-                  <Link key={href} href={href}
-                    className={`block px-3 py-2 rounded-md text-sm whitespace-nowrap transition ${pathname === href ? "bg-yellow-500 text-black font-semibold" : "hover:bg-gray-800"}`}>{label}</Link>
-                ))}
+              <div key={group} className="col-span-2 md:block">
+                <div className="px-3 pb-1 text-[11px] uppercase tracking-wider text-gray-500">{group}</div>
+                <div className="grid grid-cols-2 gap-1 md:block">
+                  {shown.map(([href, label]) => (
+                    <Link key={href} href={href} onClick={() => setMenu(false)}
+                      className={`block px-3 py-2.5 md:py-2 rounded-md text-sm transition ${pathname === href ? "bg-yellow-500 text-black font-semibold" : "hover:bg-gray-800"}`}>{label}</Link>
+                  ))}
+                </div>
               </div>
             );
           })}
-        </div>
-        {user && <div className="hidden md:block mt-6 px-3 text-xs text-gray-500 break-all">{user.name || user.email}<br />{user.role}</div>}
+        </nav>
+        {user && <div className={`${menu ? "block" : "hidden"} md:block mt-6 px-3 text-xs text-gray-500 break-all`}>{user.name || user.email}<br />{user.role}</div>}
+        <div className="hidden md:block mt-2 px-3 text-[10px] text-gray-600">Build 2026-11-25e · sourcing bot</div>
       </aside>
       <section className="flex-1 min-w-0 p-4 md:p-8 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">{title}</h1>
           <div className="flex gap-2 print:hidden">{actions}</div>
         </div>
         {error && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">{error}</div>}
         {children}
       </section>
+      {(can(user, "assistant:use") || user?.role === "admin") && pathname !== "/pm/chat" && <Assistant user={user} />}
     </div>
   );
 }

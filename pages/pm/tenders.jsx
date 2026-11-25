@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DataTable from "../../components/pm/DataTable";
 import EditDialog from "../../components/pm/EditDialog";
 import { Btn, Card, Empty, Field, Form, Panel, Select, Shell } from "../../components/pm/ui";
-import { ProgressCell, StageSteps, TaskDetail } from "../../components/pm/TaskProgress";
+import { AiPill, BidPanel, ProgressCell, StageSteps, TaskDetail } from "../../components/pm/TaskProgress";
 import { addDays } from "../../lib/dates";
 import { api, can, getUser, money, useApi } from "../../lib/pm";
 
@@ -269,6 +269,7 @@ function Pipeline({ canWrite, canAssign, refreshKey, bump }) {
   const tasks = useApi("/api/tender_tasks", [refreshKey]);
   const [editing, setEditing] = useState(null);
   const [assigning, setAssigning] = useState(null);
+  const [bidOf, setBidOf] = useState(null);
   const [open, setOpen] = useState(false);
   const [err, setErr] = useState("");
   const refresh = () => { reload(); tasks.reload(); bump(); };
@@ -277,6 +278,7 @@ function Pipeline({ canWrite, canAssign, refreshKey, bump }) {
   const fields = TENDER_FIELDS;
   const columns = [
     { key: "title", label: "Tender", render: (r) => (<><div>{r.url ? <a href={r.url} target="_blank" rel="noreferrer" className="font-medium text-blue-700 hover:underline">{r.title}</a> : <b>{r.title}</b>}</div>
+      <button onClick={() => setBidOf(r)} className="mt-0.5 inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-700 hover:underline">Bid: checklist and documents <AiPill status={r.ai_status} /></button>
       {(byTender[r.id] || []).map((t) => <div key={t.id} className="text-xs text-gray-500">&rarr; {t.assignee_name || t.assignee_email}: {t.title} <span className="rounded bg-gray-100 px-1">{t.status}</span></div>)}</>), csv: (r) => r.title },
     { key: "buyer", label: "Buyer" }, { key: "country", label: "Country" },
     { key: "source", label: "Source", render: (r) => <span className="text-xs text-gray-600">{SITE_NAME[r.source] || r.source || "Added by hand"}</span>, csv: (r) => SITE_NAME[r.source] || r.source || "" },
@@ -291,6 +293,7 @@ function Pipeline({ canWrite, canAssign, refreshKey, bump }) {
     <div className="space-y-4">
       {(err || error) && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">{err || error}</div>}
       <Totals refreshKey={refreshKey} />
+      <p className="text-xs text-gray-500">Mark a tender <b>interested</b> and the AI reads its notice and bid documents and fills in the checklist. Open <b>Bid</b> on a tender to see it, or to upload documents you bought or collected.</p>
       {canWrite && <div><Btn onClick={() => setOpen(!open)}>{open ? "Close form" : "Add manually"}</Btn></div>}
       {open && canWrite && <Form fields={fields} cta="Add to pipeline" onSubmit={(v) => run(api("/api/tenders", { method: "POST", body: { ...v, source: "manual" } }))} />}
       <DataTable rows={[...(data || [])].sort((a, b) => String(a.deadline || "9999").localeCompare(String(b.deadline || "9999")))} columns={columns}
@@ -299,6 +302,7 @@ function Pipeline({ canWrite, canAssign, refreshKey, bump }) {
         onEdit={canWrite ? setEditing : undefined} onDelete={canWrite ? (r) => run(api(`/api/tenders/${r.id}`, { method: "DELETE" })) : undefined} />
       {editing && <EditDialog title="Edit tender" fields={fields} row={editing} onSave={(patch) => run(api(`/api/tenders/${editing.id}`, { method: "PATCH", body: patch }))} onClose={() => setEditing(null)} />}
       {assigning && <AssignDialog tender={assigning} onClose={() => setAssigning(null)} onDone={refresh} />}
+      {bidOf && <BidPanel tender={bidOf} onClose={() => { setBidOf(null); refresh(); }} onChanged={reload} />}
     </div>
   );
 }

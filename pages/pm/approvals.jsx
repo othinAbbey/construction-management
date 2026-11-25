@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Shell, Empty, Panel, Table } from "../../components/pm/ui";
 import { api, useApi, when } from "../../lib/pm";
 
-const KINDS = { material: "Material", supplier: "Supplier", location: "Location" };
+const KINDS = { material: "Material", supplier: "Supplier", location: "Location", rate: "Price" };
 const TONE = { approved: "bg-green-100 text-green-800", rejected: "bg-red-100 text-red-700" };
-const FIELDS = { material: ["name", "category", "unit", "size", "description"], supplier: ["name", "contact", "phone", "notes"], location: ["region", "district"] };
+const FIELDS = { material: ["name", "category", "unit", "size", "description"], supplier: ["name", "contact", "phone", "notes"], location: ["region", "district"], rate: ["supplier_name", "district", "region", "note"] };
+/** One line naming what was suggested (a price shows the material and amount). */
+const title = (p) => (p.kind === "rate" ? `${p.payload.material_name}: UGX ${Number(p.payload.price).toLocaleString("en-UG")}${p.payload.unit ? ` per ${p.payload.unit}` : ""}` : p.payload.name || `${p.payload.district}, ${p.payload.region}`);
 
 export default function Approvals() {
   const pending = useApi("/api/proposals?status=pending");
@@ -25,8 +27,8 @@ export default function Approvals() {
         <Panel key={p.id}>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="text-sm space-y-1">
-              <div><span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold">{KINDS[p.kind]}</span> <b className="ml-1">{p.payload.name || `${p.payload.district}, ${p.payload.region}`}</b></div>
-              <div className="text-gray-600">{FIELDS[p.kind].filter((k) => p.payload[k] && k !== "name").map((k) => `${k}: ${p.payload[k]}`).join(" | ")}</div>
+              <div><span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold">{KINDS[p.kind]}</span> <b className="ml-1">{title(p)}</b></div>
+              <div className="text-gray-600">{FIELDS[p.kind].filter((k) => p.payload[k] && k !== "name").map((k) => `${k.replace("_name", "")}: ${p.payload[k]}`).join(" | ")}</div>
               <div className="text-xs text-gray-500">from {p.submitted_by_email || "unknown"}, {when(p.submitted_at)}</div>
             </div>
             <div className="flex gap-2">
@@ -41,7 +43,7 @@ export default function Approvals() {
         <Table head={["Type", "What", "Decision", "From", "Decided", "Note"]}>
           {history.map((p) => (
             <tr key={p.id} className="border-t">
-              <td className="p-2.5">{KINDS[p.kind]}</td><td className="p-2.5">{p.payload.name || `${p.payload.district}, ${p.payload.region}`}</td>
+              <td className="p-2.5">{KINDS[p.kind]}</td><td className="p-2.5">{title(p)}</td>
               <td className="p-2.5"><span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${TONE[p.status]}`}>{p.status}</span></td>
               <td className="p-2.5">{p.submitted_by_email}</td><td className="p-2.5 whitespace-nowrap text-gray-500">{when(p.reviewed_at)}</td><td className="p-2.5 text-gray-600">{p.review_note}</td>
             </tr>

@@ -3,10 +3,10 @@ import { Shell, Btn, Empty, Field, Panel, Select, Table } from "../../components
 import LocationPick from "../../components/pm/LocationPick";
 import { api, can, getUser, useApi, when } from "../../lib/pm";
 
-const KINDS = { material: "Material", supplier: "Supplier", location: "Location (district)" };
+const KINDS = { material: "Material", supplier: "Supplier", location: "Location (district)", rate: "Price" };
 const TONE = { pending: "bg-yellow-100 text-yellow-800", approved: "bg-green-100 text-green-800", rejected: "bg-red-100 text-red-700" };
-const EMPTY = { material: { name: "", category: "", unit: "", size: "", description: "" }, supplier: { name: "", contact: "", phone: "", location_id: "", notes: "" }, location: { region: "", district: "" } };
-const describe = (p) => p.payload.name || [p.payload.district, p.payload.region].filter(Boolean).join(", ");
+const EMPTY = { material: { name: "", category: "", unit: "", size: "", description: "" }, supplier: { name: "", contact: "", phone: "", location_id: "", notes: "" }, location: { region: "", district: "" }, rate: { material: "", supplier: "", location_id: "", price: "", note: "" } };
+const describe = (p) => (p.kind === "rate" ? `${p.payload.material_name}: UGX ${Number(p.payload.price).toLocaleString("en-UG")} (${p.payload.supplier_name || "market"}, ${p.payload.district})` : p.payload.name || [p.payload.district, p.payload.region].filter(Boolean).join(", "));
 
 export default function Contribute() {
   const src = useApi("/api/sourcing");
@@ -32,7 +32,7 @@ export default function Contribute() {
 
   return (
     <Shell title="Suggest Additions" error={msg.err || src.error || mine.error}>
-      <p className="text-sm text-gray-600">Know a material, supplier or district that is missing? Send it in. {instant ? "As an admin, your additions go in straight away." : "An admin checks every suggestion before it joins the catalog."}</p>
+      <p className="text-sm text-gray-600">Know a material, supplier, district or price that is missing or out of date? Send it in. {instant ? "As an admin, your additions go in straight away." : "An admin checks every suggestion before it joins the catalog."}</p>
       {msg.ok && <div className="text-sm text-green-800 bg-green-50 border border-green-200 rounded-lg p-3">{msg.ok}</div>}
       <Panel>
         <div className="flex gap-2 mb-4">{Object.entries(KINDS).map(([k, l]) => <button key={k} onClick={() => pick(k)} className={`rounded-full px-4 py-1.5 text-sm border ${kind === k ? "bg-yellow-500 border-yellow-500 font-semibold" : "bg-white hover:bg-gray-50"}`}>{l}</button>)}</div>
@@ -47,6 +47,13 @@ export default function Contribute() {
             <Field label="Phone" value={f.phone} onChange={set("phone")} />
             {src.data && <LocationPick locations={src.data.locations} value={f.location_id} onChange={set("location_id")} />}
             <Field label="Notes" value={f.notes} onChange={set("notes")} />
+          </>}
+          {kind === "rate" && src.data && <>
+            <Select label="Material" required value={f.material} blank="Select material" onChange={set("material")} options={src.data.materials.map((m) => ({ v: m.id, l: `${m.name}${m.unit ? ` (${m.unit})` : ""}` }))} />
+            <Select label="Supplier (optional)" value={f.supplier} blank="General market price" onChange={set("supplier")} options={src.data.suppliers.map((x) => ({ v: x.id, l: x.name }))} />
+            <LocationPick locations={src.data.locations} value={f.location_id} onChange={set("location_id")} required />
+            <Field label="Price per unit (UGX)" required type="number" value={f.price} onChange={set("price")} />
+            <Field label="Note (e.g. delivered, quoted 20 Nov)" value={f.note} onChange={set("note")} />
           </>}
           {kind === "location" && <>
             <Select label="Region" required value={f.region} blank="Select region" onChange={set("region")} options={regions.map((r) => ({ v: r, l: r }))} />
