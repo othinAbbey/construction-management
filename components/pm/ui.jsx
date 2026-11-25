@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import PasswordField from "./PasswordField";
 import { api, can, getToken, getUser, setUser as setUserStore } from "../../lib/pm";
 
 /** [label, href, permission needed (optional)]. The server decides who has which permission; see /api/me. */
 const NAV = [
   ["Overview", [["/pm", "Dashboard"], ["/pm/summary", "Project Summary", "projects:read"]]],
   ["Projects", [["/pm/projects", "Projects", "projects:read"], ["/pm/tasks", "Tasks", "projects:read"], ["/pm/schedule", "Schedule", "projects:read"],
-    ["/pm/budget", "Budget & Costs", "projects:read"], ["/pm/logs", "Site Logs", "projects:read"], ["/pm/issues", "Issues & RFIs", "projects:read"], ["/pm/files", "Documents", "files:read"]]],
+    ["/pm/budget", "Budget & Costs", "projects:read"], ["/pm/logs", "Site Logs", "projects:read"], ["/pm/issues", "Issues & RFIs", "projects:read"],
+    ["/pm/forms", "Site Forms", "projects:read"], ["/pm/files", "Documents", "files:read"]]],
   ["Material sourcing", [["/pm/sourcing", "Material Rates", "catalog:read"], ["/pm/suppliers", "Suppliers", "catalog:read"],
     ["/pm/calculator", "Quantity Calculator", "catalog:read"], ["/pm/contribute", "Suggest Additions", "catalog:propose"]]],
-  ["Estimating", [["/boq", "BOQ Extraction", "boq:use"]]],
-  ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], ["/pm/inbox", "Website Inbox", "messages:read"],
-    ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
+  ["Estimating & business", [["/pm/boq", "BOQ Extraction", "boq:use"], ["/pm/tenders", "Tenders", "tenders:read"]]],
+  ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], ["/pm/inbox", "Company Inbox", "messages:read"],
+    ["/pm/roles", "Roles & Access", "roles:manage"], ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
 ];
 
 /** Page frame for every signed-in screen: sidebar, title, error banner. Refreshes your rights from the server on load. */
@@ -87,11 +89,13 @@ export const Select = ({ label, value, onChange, options, required, blank = "-" 
     </select>
   </label>
 );
-export const Field = ({ label, value, onChange, type = "text", required, ...rest }) => (
-  <label className="text-sm text-gray-600">{label}
-    <input className={inputCls} type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} {...rest} />
-  </label>
-);
+export const Field = ({ label, value, onChange, type = "text", required, generate, ...rest }) => type === "password"
+  ? <PasswordField label={label} value={value} onChange={onChange} required={required} generate={generate} {...rest} />
+  : (
+    <label className="text-sm text-gray-600">{label}
+      <input className={inputCls} type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} {...rest} />
+    </label>
+  );
 export const Btn = ({ children, kind = "primary", ...p }) => (
   <button {...p} className={`rounded-md px-4 py-2 text-sm font-semibold transition disabled:opacity-50 ${kind === "primary" ? "bg-yellow-500 text-black hover:bg-yellow-400" : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"} ${p.className || ""}`}>{children}</button>
 );
@@ -104,7 +108,8 @@ export function Form({ fields, onSubmit, cta = "Add", disabled }) {
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(v); setV(init()); }} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 bg-white p-4 rounded-xl border shadow-sm">
       {fields.map((f) => f.options
         ? <Select key={f.k} label={f.label} required={f.req} value={v[f.k]} options={f.options} onChange={(x) => setV({ ...v, [f.k]: x })} />
-        : <Field key={f.k} label={f.label} type={f.type} required={f.req} value={v[f.k]} onChange={(x) => setV({ ...v, [f.k]: x })} />)}
+        
+        : <Field key={f.k} label={f.label} type={f.type} required={f.req} generate={f.generate} value={v[f.k]} onChange={(x) => setV({ ...v, [f.k]: x })} />)}
       <Btn disabled={disabled} className="self-end">{cta}</Btn>
     </form>
   );

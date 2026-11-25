@@ -6,7 +6,7 @@ import { toCsv, downloadText } from "../../lib/csv";
  * columns: [{ key, label, render?(row), value?(row) for sort/search/export, align? }]
  * searchKeys: field names (or functions) the search box looks in.
  */
-export default function DataTable({ rows, columns, searchKeys = [], onEdit, onDelete, empty = "Nothing here yet.", exportName = "export" }) {
+export default function DataTable({ rows, columns, searchKeys = [], onEdit, onDelete, actions, empty = "Nothing here yet.", exportName = "export" }) {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState({ key: null, dir: 1 });
   const val = (r, c) => (c.value ? c.value(r) : r[c.key]);
@@ -42,14 +42,15 @@ export default function DataTable({ rows, columns, searchKeys = [], onEdit, onDe
                   <button onClick={() => click(c.key)} className="hover:text-black">{c.label}{sort.key === c.key ? (sort.dir > 0 ? " ▲" : " ▼") : ""}</button>
                 </th>
               ))}
-              {(onEdit || onDelete) && <th />}
+              {(onEdit || onDelete || actions) && <th />}
             </tr></thead>
             <tbody>
               {shown.map((r) => (
                 <tr key={r.id} className="border-t align-top hover:bg-gray-50">
                   {columns.map((c) => <td key={c.key || c.label} className={`p-2.5 ${c.align === "right" ? "text-right tabular-nums" : ""}`}>{c.render ? c.render(r) : val(r, c) ?? ""}</td>)}
-                  {(onEdit || onDelete) && (
+                  {(onEdit || onDelete || actions) && (
                     <td className="p-2.5 whitespace-nowrap space-x-3 print:hidden">
+                      {actions && actions(r)}
                       {onEdit && <button className="text-xs text-blue-700 hover:underline" onClick={() => onEdit(r)}>Edit</button>}
                       {onDelete && <button className="text-xs text-red-600 hover:underline" onClick={() => confirm("Delete this item? This cannot be undone.") && onDelete(r)}>Delete</button>}
                     </td>

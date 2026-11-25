@@ -9,7 +9,7 @@ import { costColumns, costFields } from "../budget";
 import { issueColumns, issueFields } from "../issues";
 import { logColumns, logFields } from "../logs";
 import { taskColumns, taskFields } from "../tasks";
-import { api, can, getUser } from "../../../lib/pm";
+import { api } from "../../../lib/pm";
 
 const TABS = [["overview", "Overview"], ["tasks", "Tasks"], ["costs", "Costs"], ["logs", "Site logs"], ["issues", "Issues"], ["files", "Documents"]];
 const PAGES = {
@@ -19,7 +19,6 @@ const PAGES = {
   issues: { title: "Issue", fields: issueFields, columns: issueColumns, search: ["title", "detail"], add: "Log item" },
 };
 
-/** Everything about one project in one place. Each tab reuses the same components as the main pages. */
 export default function ProjectHub() {
   const { query } = useRouter();
   const id = query.id;

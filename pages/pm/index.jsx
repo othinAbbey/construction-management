@@ -1,21 +1,50 @@
 import Link from "next/link";
-import { Shell, Card, Bar, Empty, Health, Panel } from "../../components/pm/ui";
+import { Shell, Card, Bar, Btn, Empty, Health, Panel } from "../../components/pm/ui";
 import { useEffect, useState } from "react";
-import { can, getUser, money, today, useApi, usePM } from "../../lib/pm";
+import { api, can, getUser, money, today, useApi, usePM } from "../../lib/pm";
+import { useRouter } from "next/router";
+import Spinner from "../../components/spinner";
+
+
 
 export default function Dashboard() {
+  const router = useRouter();
   const [me, setMe] = useState(undefined);
-  useEffect(() => setMe(getUser()), []);
-  if (me && !can(me, "projects:read")) return <Welcome me={me} />;
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const user = getUser();
+    setMe(user);
+    setAuthChecked(true);
+  }, []);
+
+  useEffect(() => {
+    if (authChecked && !me) {
+      router.replace("/pm/login");
+    }
+  }, [authChecked, me, router]);
+
+  // Never mount the dashboard before checking authentication.
+  if (!authChecked || !me) {
+    return <Spinner />;
+  }
+
+  // Signed-in users without project access see the welcome page.
+  if (!can(me, "projects:read")) {
+    return <Welcome me={me} />;
+  }
+
   return <ProjectDashboard />;
 }
 
+
+
 function Welcome({ me }) {
   return (
-    <Shell title={`Welcome${me.name ? `, ${me.name}` : ""}`}>
+    <Shell title={`Welcome${me?.name ? `, ${me.name}` : ""}`}>
       <div className="grid sm:grid-cols-3 gap-3 text-sm">
-        <Link href="/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">BOQ Extraction</b><div className="text-gray-300 mt-1">Upload a drawing PDF. Your files and results are saved to your account.</div></Link>
-        <Link href="/pm/sourcing" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Material Rates</b><div className="text-gray-500 mt-1">Compare supplier prices by district.</div></Link>
+        <Link href="/pm/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">Estimation and Tendering</b><div className="text-gray-300 mt-1">Upload a drawing PDF. Your files and results are saved to your account.</div></Link>
+        <Link href="/pm/sourcing" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Material Supplier and Rates</b><div className="text-gray-500 mt-1">Compare supplier prices by district.</div></Link>
         <Link href="/pm/calculator" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Quantity Calculator</b><div className="text-gray-500 mt-1">Materials and cost for walls, slabs and concrete.</div></Link>
       </div>
       <p className="text-sm text-gray-500">Missing a material, supplier or district? <Link href="/pm/contribute" className="underline">Suggest it</Link>.</p>
@@ -26,11 +55,33 @@ function Welcome({ me }) {
 function ProjectDashboard() {
   const { d, error } = usePM();
   const port = useApi("/api/summary");
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState("");
   const open = d.tasks.filter((t) => t.status !== "done");
   const overdue = open.filter((t) => t.due && t.due < today());
   const t = port.data?.totals;
+  async function exportData() {
+    setExporting(true);
+    setExportError("");
+    try {
+      const data = await api("/api/export");
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `canda-export-${today()}.json`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setExportError(e.message);
+    } finally {
+      setExporting(false);
+    }
+  }
   return (
-    <Shell title="Dashboard" error={error || port.error}>
+    <Shell title="Dashboard" error={error || port.error || exportError} actions={can(getUser(), "projects:write") && <Btn kind="secondary" disabled={exporting} onClick={exportData}>{exporting ? "Exporting..." : "Export JSON"}</Btn>}>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Card label="Active projects" value={d.projects.filter((p) => p.status !== "complete").length} sub={t ? `${t.health.red} at risk, ${t.health.amber} need attention` : ""} />
         <Card label="Open tasks" value={open.length} sub={`${overdue.length} overdue`} tone={overdue.length ? "text-red-600" : undefined} />
@@ -52,7 +103,7 @@ function ProjectDashboard() {
         )}
       </Panel>
       <div className="grid sm:grid-cols-3 gap-3 text-sm">
-        <Link href="/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">BOQ Extraction</b><div className="text-gray-300 mt-1">Turn a drawing PDF into a bill of quantities.</div></Link>
+        <Link href="/pm/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">BOQ Extraction</b><div className="text-gray-300 mt-1">Turn a drawing PDF into a bill of quantities.</div></Link>
         <Link href="/pm/calculator" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Quantity Calculator</b><div className="text-gray-500 mt-1">Materials and cost for walls, slabs and concrete.</div></Link>
         <Link href="/pm/sourcing" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Material Rates</b><div className="text-gray-500 mt-1">Compare supplier prices by district.</div></Link>
       </div>

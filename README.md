@@ -18,22 +18,26 @@ Production: `npm run build && npm start`, or deploy to any host that runs Next.j
 |---|---|
 | Public site | `/`, `/about`, `/services`, `/gallery`, `/contact` (messages go to the API inbox) |
 | Accounts | `/pm/login` (sign in, create account), `/pm/reset`, `/pm/team` (password, and admin user management) |
-| Project manager | `/pm` dashboard, `/pm/projects` and `/pm/projects/:id` (one page per project), tasks, schedule, budget, site logs, issues, documents, summary |
+| Project manager | `/pm` dashboard, `/pm/projects` and `/pm/projects/:id` (one page per project), tasks, **schedule (MS Project style Gantt)**, budget, site logs, issues, documents, summary |
 | Material sourcing | `/pm/sourcing`, `/pm/suppliers`, `/pm/calculator`, `/pm/contribute` (suggest additions) |
-| BOQ | `/boq` (your own jobs, saved to your account) |
-| Admin | `/pm/approvals`, `/pm/audit`, `/pm/inbox`, `/pm/billing` (placeholder) |
+| BOQ | `/boq` (your drawings are saved to your account: list, open, download, try again, delete) |
+| Business | `/pm/tenders`: search tenders, a pipeline with value in UGX and totals, **assign a task to a project manager (general project manager copied)**, and My assignments |
+| Admin | `/pm/roles` (create roles and choose their rights), `/pm/team` (create accounts with a role), `/pm/approvals`, `/pm/audit`, `/pm/inbox`, `/pm/billing` (placeholder) |
 
 ## How it is organised
 
     lib/pm.js            the ONLY place that calls the API (api(), useApi(), usePM(), session, can())
     lib/boqApi.js        BOQ calls (also through the API)
-    lib/csv.js           CSV export helper
+    lib/csv.js           CSV export helper     lib/dates.js   date helpers
     components/pm/       reusable building blocks:
         ui.jsx           Shell (sidebar, rights-aware menu), Card, Panel, Field, Select, Form, Table...
         ResourcePage     one config-driven list page: search, sort, CSV, add, edit, delete  (projects, tasks, costs, logs, issues)
         DataTable        the list itself            EditDialog   edit one record
         ProjectSummary   the project report         FilesPanel   documents of a project
         LocationPick     region + district picker
+        Gantt, TaskEditor  the schedule chart and the task/links dialog
+        PasswordField    password box with Show/Hide and "make a strong password"
+        MusicPlayer      the "Play music" button in the header (set NEXT_PUBLIC_MUSIC_URL; use https:// on an https site)
     pages/               thin: each page is configuration plus these components
     legacy/              the original prototype screens, kept for reference (not built)
 

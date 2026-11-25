@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Btn, Del, Empty, Panel, Select, Table } from "./ui";
 import { api, can, downloadFile, getUser, size, uploadFile, useApi, when } from "../../lib/pm";
 
@@ -12,7 +12,8 @@ export default function FilesPanel({ project }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const input = useRef(null);
-  const canWrite = can(getUser(), "files:write");
+  const [canWrite, setCanWrite] = useState(false);
+  useEffect(() => setCanWrite(can(getUser(), "files:write")), []);
   const run = (fn) => fn().catch((x) => setErr(x.message));
 
   async function upload(e) {

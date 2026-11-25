@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
+import PasswordField from "../../components/pm/PasswordField";
 import { api, startSession } from "../../lib/pm";
 
 export default function Reset() {
@@ -20,7 +21,7 @@ export default function Reset() {
         {err && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">{err}</div>}
         <label className="block text-sm">Email<input className={cls} type="email" required value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></label>
         <label className="block text-sm">Reset code<input className={`${cls} font-mono uppercase`} required placeholder="XXXXX-XXXXX" value={f.code} onChange={(e) => setF({ ...f, code: e.target.value })} /></label>
-        <label className="block text-sm">New password (8+ characters)<input className={cls} type="password" required minLength={8} autoComplete="new-password" value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} /></label>
+        <PasswordField label="New password (8+ characters)" required minLength={8} autoComplete="new-password" value={f.password} onChange={(v) => setF({ ...f, password: v })} generate />
         <button disabled={busy} className="w-full bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 text-black font-semibold rounded-md py-2.5">{busy ? "Please wait..." : "Set new password"}</button>
         <div className="text-sm text-center"><Link href="/pm/login" className="text-gray-600 underline">Back to sign in</Link></div>
       </form>

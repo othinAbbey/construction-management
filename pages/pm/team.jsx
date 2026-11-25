@@ -7,11 +7,13 @@ export default function Team() {
   useEffect(() => { setMe(getUser()); api("/api/me").then((u) => { setUser(u); setMe(u); }).catch(() => {}); }, []);
   const admin = can(me, "users:manage");
   const users = useApi(admin ? "/api/users" : null, [admin]);
+  const roles = useApi(admin ? "/api/roles" : null, [admin]);
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
   const [pw, setPw] = useState({ current: "", password: "", again: "" });
   const [code, setCode] = useState(null);
   const run = (fn, msg) => fn().then(() => { setErr(""); if (msg) setOk(msg); }).catch((e) => { setOk(""); setErr(e.message); });
+  const roleOptions = (roles.data || []).map((r) => ({ v: r.code, l: r.name }));
 
   const changePassword = (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function Team() {
   };
 
   return (
-    <Shell title="Team & Security" error={err || users.error}>
+    <Shell title="Team & Security" error={err || users.error || roles.error}>
       {ok && <div className="text-sm text-green-800 bg-green-50 border border-green-200 rounded-lg p-3">{ok}</div>}
       <Panel title="Change my password">
         <form onSubmit={changePassword} className="grid gap-3 sm:grid-cols-4 items-end">
@@ -42,25 +44,28 @@ export default function Team() {
               <button className="mt-2 text-xs underline" onClick={() => setCode(null)}>Hide</button>
             </div>
           )}
-          <Panel title="Add a team member">
-            <Form cta="Create account" onSubmit={(v) => run(async () => { await api("/api/users", { method: "POST", body: v }); await users.reload(); }, `Account created for ${v.email}.`)} fields={[
+          <Panel title="Create an account">
+            <Form cta="Create account" onSubmit={(v) => run(async () => { await api("/api/users", { method: "POST", body: v }); await users.reload(); await roles.reload(); }, `Account created for ${v.email}. Give them the password you chose; they can change it after signing in.`)} fields={[
               { k: "name", label: "Name" }, { k: "email", label: "Email", type: "email", req: true },
-              { k: "password", label: "Temporary password (8+)", type: "password", req: true },
-              { k: "role", label: "Role", def: "user", req: true, options: [{ v: "admin", l: "Admin: everything" }, { v: "manager", l: "Manager: project work" }, { v: "viewer", l: "Viewer: read-only project data" }, { v: "user", l: "User: catalog and own BOQ only" }] },
+              { k: "password", label: "Temporary password (8+)", type: "password", req: true, generate: true },
+              { k: "role", label: "Role", def: "user", req: true, options: roleOptions },
             ]} />
+            <div className="mt-3 grid gap-1 text-xs text-gray-500 sm:grid-cols-2">
+              {(roles.data || []).map((r) => <div key={r.code}><b className="text-gray-700">{r.name}:</b> {r.description || "Custom role"}</div>)}
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Need a different mix of access? Create a role on the <a className="underline" href="/pm/roles">Roles &amp; Access</a> page.</p>
           </Panel>
           <Table head={["Name", "Email", "Role", "Status", "Added", ""]}>
             {(users.data || []).map((u) => (
               <tr key={u.id} className="border-t">
                 <td className="p-2.5">{u.name}</td><td className="p-2.5">{u.email}</td>
-                <td className="p-2.5"><Select label="" value={u.role} blank={null} onChange={(role) => run(async () => { await api(`/api/users/${u.id}`, { method: "PATCH", body: { role } }); await users.reload(); })}
-                  options={["admin", "manager", "viewer", "user"].map((r) => ({ v: r, l: r }))} /></td>
+                <td className="p-2.5"><Select label="" value={u.role || ""} blank={null} onChange={(role) => run(async () => { await api(`/api/users/${u.id}`, { method: "PATCH", body: { role } }); await users.reload(); await roles.reload(); })} options={roleOptions} /></td>
                 <td className="p-2.5"><span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${u.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-200 text-gray-600"}`}>{u.status}</span></td>
                 <td className="p-2.5 whitespace-nowrap">{when(u.created)}</td>
                 <td className="p-2.5 whitespace-nowrap space-x-3">
                   <button className="text-xs text-blue-700 hover:underline" onClick={() => run(async () => setCode(await api(`/api/users/${u.id}/reset`, { method: "POST" })))}>Reset password</button>
                   {u.id !== me?.id && <button className="text-xs text-blue-700 hover:underline" onClick={() => run(async () => { await api(`/api/users/${u.id}`, { method: "PATCH", body: { status: u.status === "active" ? "disabled" : "active" } }); await users.reload(); })}>{u.status === "active" ? "Disable" : "Enable"}</button>}
-                  {u.id !== me?.id && <Del onClick={() => run(async () => { await api(`/api/users/${u.id}`, { method: "DELETE" }); await users.reload(); })} />}
+                  {u.id !== me?.id && <Del onClick={() => run(async () => { await api(`/api/users/${u.id}`, { method: "DELETE" }); await users.reload(); await roles.reload(); })} />}
                 </td>
               </tr>
             ))}

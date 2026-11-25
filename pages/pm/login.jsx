@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import PasswordField from "../../components/pm/PasswordField";
 import { api, startSession } from "../../lib/pm";
 
 export default function Login() {
   const [setup, setSetup] = useState(false);
   const [signup, setSignup] = useState(false);
   const isNew = setup || signup;
-  const [f, setF] = useState({ name: "", email: "", password: "" });
+  const [f, setF] = useState({ name: "", organization_name: "", email: "", password: "" });
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -31,8 +32,9 @@ export default function Login() {
         </div>
         {err && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">{err}</div>}
         {isNew && <label className="block text-sm">Name<input className={cls} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></label>}
+        {isNew && <label className="block text-sm">Company name<input className={cls} required minLength={2} maxLength={120} value={f.organization_name} onChange={(e) => setF({ ...f, organization_name: e.target.value })} /></label>}
         <label className="block text-sm">Email<input className={cls} type="email" required autoComplete="username" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></label>
-        <label className="block text-sm">Password<input className={cls} type="password" required minLength={isNew ? 8 : 1} autoComplete={isNew ? "new-password" : "current-password"} value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} /></label>
+        <PasswordField label="Password" required minLength={isNew ? 8 : 1} autoComplete={isNew ? "new-password" : "current-password"} value={f.password} onChange={(v) => setF({ ...f, password: v })} generate={isNew} />
         <button disabled={busy} className="w-full bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 text-black font-semibold rounded-md py-2.5">{busy ? "Please wait..." : isNew ? "Create account" : "Sign in"}</button>
         {!isNew && <div className="text-sm text-center"><Link href="/pm/reset" className="text-gray-600 hover:text-black underline">Forgot your password?</Link></div>}
         {!setup && <div className="text-sm text-center text-gray-600">{signup ? "Already have an account?" : "New here?"} <button type="button" onClick={() => { setSignup(!signup); setErr(""); }} className="underline font-medium">{signup ? "Sign in" : "Create an account"}</button></div>}

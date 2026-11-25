@@ -5,7 +5,7 @@ export default function SiteFooter() {
     <footer className="bg-black text-gray-400 print:hidden">
       <div className="max-w-7xl mx-auto px-4 py-10 grid gap-8 sm:grid-cols-3">
         <div>
-          <div className="text-white font-bold tracking-widest text-sm">C &amp; A CONTRACTORS LIMITED</div>
+          <div className="text-white font-bold tracking-widest text-sm">A Product of CCL</div>
           <p className="mt-2 text-sm">Civil, steel and water infrastructure across Uganda, with in-house software for estimating and project control.</p>
         </div>
         <div className="text-sm space-y-2">
@@ -23,7 +23,7 @@ export default function SiteFooter() {
           <div><Link href="/pm/calculator" className="hover:text-yellow-400">Quantity calculator</Link></div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs">&copy; {new Date().getFullYear()} C &amp; A Contractors Limited. All rights reserved.</div>
+      <div className="border-t border-white/10 py-4 text-center text-xs">&copy; {new Date().getFullYear()} C C &amp; L All rights reserved.</div>
     </footer>
   );
 }

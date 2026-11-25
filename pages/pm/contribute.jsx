@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shell, Btn, Empty, Field, Panel, Select, Table } from "../../components/pm/ui";
 import LocationPick from "../../components/pm/LocationPick";
 import { api, can, getUser, useApi, when } from "../../lib/pm";
@@ -14,7 +14,8 @@ export default function Contribute() {
   const [kind, setKind] = useState("material");
   const [f, setF] = useState(EMPTY.material);
   const [msg, setMsg] = useState({ ok: "", err: "" });
-  const instant = can(getUser(), "proposals:review");
+  const [instant, setInstant] = useState(false);
+  useEffect(() => setInstant(can(getUser(), "proposals:review")), []);
   const set = (k) => (v) => setF({ ...f, [k]: v });
   const pick = (k) => { setKind(k); setF(EMPTY[k]); setMsg({ ok: "", err: "" }); };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shell, Del, Empty } from "../../components/pm/ui";
 import { api, can, getUser, useApi, when } from "../../lib/pm";
 
@@ -7,6 +7,8 @@ const TONE = { new: "bg-yellow-100 text-yellow-800", read: "bg-gray-100 text-gra
 export default function Inbox() {
   const msgs = useApi("/api/messages");
   const [err, setErr] = useState("");
+  const [canDelete, setCanDelete] = useState(false);
+  useEffect(() => setCanDelete(can(getUser(), "messages:manage")), []);
   const set = (id, status) => api(`/api/messages/${id}`, { method: "PATCH", body: { status } }).then(msgs.reload).catch((e) => setErr(e.message));
   return (
     <Shell title="Website Inbox" error={err || msgs.error}>
@@ -20,7 +22,7 @@ export default function Inbox() {
           <p className="text-sm whitespace-pre-wrap">{m.message}</p>
           <div className="flex gap-4 text-xs">
             {["new", "read", "replied"].filter((s) => s !== m.status).map((s) => <button key={s} className="text-blue-700 hover:underline" onClick={() => set(m.id, s)}>Mark {s}</button>)}
-            {can(getUser(), "messages:manage") && <Del onClick={() => api(`/api/messages/${m.id}`, { method: "DELETE" }).then(msgs.reload).catch((e) => setErr(e.message))} />}
+            {canDelete && <Del onClick={() => api(`/api/messages/${m.id}`, { method: "DELETE" }).then(msgs.reload).catch((e) => setErr(e.message))} />}
           </div>
         </div>
       ))}
