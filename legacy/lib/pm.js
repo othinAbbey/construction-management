@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-
+export const PRODUCT = "BuildSuite360";
 const KEY = "cm_pm_v1";
 export const uid = () => Math.random().toString(36).slice(2, 10);
 export const today = () => new Date().toISOString().slice(0, 10);

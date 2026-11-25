@@ -14,7 +14,7 @@ const NAV = [
     ["/pm/forms", "Site Forms", "projects:read"], ["/pm/files", "Documents", "files:read"]]],
   ["Material sourcing", [["/pm/sourcing", "Material Rates", "catalog:read"], ["/pm/suppliers", "Suppliers", "catalog:read"],
     ["/pm/calculator", "Quantity Calculator", "catalog:read"], ["/pm/contribute", "Suggest Additions", "catalog:propose"]]],
-  ["Estimating & business", [["/pm/boq", "BOQ Extraction", "boq:use"], ["/pm/tenders", "Tenders", "tenders:read"]]],
+  ["Estimating & business", [["/pm/boq", "BOQ Extraction", "boq:use"], ["/pm/tenders", "Tenders", "tenders:read"], ["/pm/company-tasks", "Company Tasks", "tasks:oversee"]]],
   ["Marketplace (all companies)", [["/pm/subcontracts", "Subcontracts", "market:read"]]],
   ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], 
     ["/pm/company", "Company Settings", "users:manage"], ["/pm/roles", "Roles & Access", "roles:manage"], ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
@@ -45,7 +45,7 @@ export function Shell({ title, children, error, actions }) {
         )}
         <div className="flex md:flex-col gap-x-1 gap-y-3 overflow-x-auto md:overflow-visible">
           {NAV.map(([group, items]) => {
-            const shown = items.filter(([, , need]) => !need || can(user, need));
+            const shown = items.filter(([, , need]) => !need || can(user, need) || user?.role === "admin");   // the Administrator sees every page
             if (!shown.length) return null;
             return (
               <div key={group} className="flex md:block items-center gap-1 shrink-0">

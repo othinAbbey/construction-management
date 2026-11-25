@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DataTable from "../../components/pm/DataTable";
 import EditDialog from "../../components/pm/EditDialog";
 import { Btn, Card, Empty, Field, Form, Panel, Select, Shell } from "../../components/pm/ui";
+import { ProgressCell, StageSteps, TaskDetail } from "../../components/pm/TaskProgress";
 import { addDays } from "../../lib/dates";
 import { api, can, getUser, money, useApi } from "../../lib/pm";
 
@@ -306,6 +307,7 @@ function Pipeline({ canWrite, canAssign, refreshKey, bump }) {
 function Mine({ canAssign }) {
   const { data, error, reload } = useApi("/api/tender_tasks?mine=1");
   const [err, setErr] = useState("");
+  const [open, setOpen] = useState(null);
   const patch = (t, body) => api(`/api/tender_tasks/${t.id}`, { method: "PATCH", body }).then(() => { setErr(""); reload(); }).catch((e) => setErr(e.message));
   return (
     <div className="space-y-3">
@@ -320,6 +322,9 @@ function Mine({ canAssign }) {
             <div className="text-sm text-gray-500">{t.relation === "copied" && <>Assigned to <b>{t.assignee_name || t.assignee_email}</b> · </>}Due <Deadline date={t.due} /></div>
             {t.notes && <div className="text-sm text-gray-700 whitespace-pre-wrap">{t.notes}</div>}
             {t.copies.length > 0 && <div className="text-xs text-gray-400">Copied: {t.copies.map((c) => c.name || c.email).join(", ")}</div>}
+            <StageSteps stage={t.stage} />
+            <div className="max-w-sm"><ProgressCell task={t} /></div>
+            <button onClick={() => setOpen(t.id)} className="text-sm font-semibold text-yellow-700 hover:underline">{t.relation === "assigned" ? "Update progress and requirements" : "See progress and requirements"} &rarr;</button>
           </div>
           {(t.relation === "assigned" || canAssign) && (
             <select value={t.status} onChange={(e) => patch(t, { status: e.target.value })} className="border rounded-md px-2 py-1 text-sm">
@@ -328,6 +333,7 @@ function Mine({ canAssign }) {
           )}
         </div>
       ))}
+      {open && <TaskDetail id={open} onClose={() => setOpen(null)} onChanged={reload} />}
     </div>
   );
 }
