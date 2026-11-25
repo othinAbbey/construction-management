@@ -108,7 +108,7 @@ export default function Boq() {
         <h1 className="text-3xl font-bold">BOQ Extraction</h1>
         <p className="mt-3 text-gray-600">Upload a drawing set as a PDF and get a priced bill of quantities in Excel. Sign in to use it.</p>
         <Link href="/pm/login?next=/boq" className="inline-block mt-6 rounded-md bg-yellow-500 px-6 py-3 font-semibold text-black hover:bg-yellow-400">Sign in</Link>
-        <div className="mt-3 text-sm text-gray-500">No account? <Link href="/contact" className="underline">Ask us for access</Link>.</div>
+        <div className="mt-3 text-sm text-gray-500">No account? <Link href="/pm/login?signup=1" className="underline">Create your company account</Link>.</div>
       </div>
     );
   }

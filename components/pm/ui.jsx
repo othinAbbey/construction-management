@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PasswordField from "./PasswordField";
+import Head from "next/head";
+import { Logo } from "../Brand";
 import { api, can, getToken, getUser, setUser as setUserStore } from "../../lib/pm";
 
 /** [label, href, permission needed (optional)]. The server decides who has which permission; see /api/me. */
@@ -13,8 +15,9 @@ const NAV = [
   ["Material sourcing", [["/pm/sourcing", "Material Rates", "catalog:read"], ["/pm/suppliers", "Suppliers", "catalog:read"],
     ["/pm/calculator", "Quantity Calculator", "catalog:read"], ["/pm/contribute", "Suggest Additions", "catalog:propose"]]],
   ["Estimating & business", [["/pm/boq", "BOQ Extraction", "boq:use"], ["/pm/tenders", "Tenders", "tenders:read"]]],
-  ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], ["/pm/inbox", "Company Inbox", "messages:read"],
-    ["/pm/roles", "Roles & Access", "roles:manage"], ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
+  ["Marketplace (all companies)", [["/pm/subcontracts", "Subcontracts", "market:read"]]],
+  ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], 
+    ["/pm/company", "Company Settings", "users:manage"], ["/pm/roles", "Roles & Access", "roles:manage"], ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
 ];
 
 /** Page frame for every signed-in screen: sidebar, title, error banner. Refreshes your rights from the server on load. */
@@ -25,11 +28,21 @@ export function Shell({ title, children, error, actions }) {
     if (!getToken()) { window.location.href = `/pm/login?next=${encodeURIComponent(window.location.pathname)}`; return; }
     setUser(getUser());
     api("/api/me").then((u) => { setUserStore(u); setUser(u); }).catch(() => {});
+    const refresh = () => setUser(getUser());                                // e.g. Company Settings renamed the company
+    window.addEventListener("pm:user", refresh);
+    return () => window.removeEventListener("pm:user", refresh);
   }, []);
 
   return (
     <div className="flex flex-col md:flex-row md:min-h-[calc(100vh-4.5rem)]">
+      <Head><title>{user?.organization?.name ? `${title} · ${user.organization.name}` : title}</title></Head>
       <aside className="md:w-60 md:shrink-0 bg-gray-900 text-gray-200 p-3 md:py-5 print:hidden">
+        {user?.organization && (
+          <div className="hidden md:flex items-center gap-2 px-3 pb-4 mb-3 border-b border-gray-800">
+            <Logo org={user.organization} size="h-8 w-8" />
+            <div className="text-sm font-semibold text-white leading-tight break-words min-w-0">{user.organization.name}</div>
+          </div>
+        )}
         <div className="flex md:flex-col gap-x-1 gap-y-3 overflow-x-auto md:overflow-visible">
           {NAV.map(([group, items]) => {
             const shown = items.filter(([, , need]) => !need || can(user, need));

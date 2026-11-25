@@ -1,7 +1,8 @@
-# canda-frontend
+# Project Assistant: frontend
 
-The C & A Contractors website and apps (Next.js 13 pages router + Tailwind). It is a **separate project**: it talks to one
-thing only, the C & A API (`canda-api`), over HTTP. It never connects to a database or to the BOQ service directly.
+The multi-company website and apps (Next.js 13 pages router + Tailwind). Every company that signs up gets a private workspace
+shown with its own name and logo (set on **Company Settings**). It is a **separate project**: it talks to one
+thing only, the API, over HTTP. It never connects to a database or to the BOQ service directly.
 
 ## Run it
 
@@ -16,13 +17,13 @@ Production: `npm run build && npm start`, or deploy to any host that runs Next.j
 
 | Area | Pages |
 |---|---|
-| Public site | `/`, `/about`, `/services`, `/gallery`, `/contact` (messages go to the API inbox) |
+| Public site | `/` (neutral landing page: sign in or create a company account) |
 | Accounts | `/pm/login` (sign in, create account), `/pm/reset`, `/pm/team` (password, and admin user management) |
 | Project manager | `/pm` dashboard, `/pm/projects` and `/pm/projects/:id` (one page per project), tasks, **schedule (MS Project style Gantt)**, budget, site logs, issues, documents, summary |
 | Material sourcing | `/pm/sourcing`, `/pm/suppliers`, `/pm/calculator`, `/pm/contribute` (suggest additions) |
 | BOQ | `/boq` (your drawings are saved to your account: list, open, download, try again, delete) |
 | Business | `/pm/tenders`: search tenders, a pipeline with value in UGX and totals, **assign a task to a project manager (general project manager copied)**, and My assignments |
-| Admin | `/pm/roles` (create roles and choose their rights), `/pm/team` (create accounts with a role), `/pm/approvals`, `/pm/audit`, `/pm/inbox`, `/pm/billing` (placeholder) |
+| Admin | `/pm/roles` (create roles and choose their rights), `/pm/team` (create accounts with a role), `/pm/company` (company name and logo), `/pm/approvals`, `/pm/audit`, `/pm/billing` (placeholder) |
 
 ## How it is organised
 
@@ -39,7 +40,6 @@ Production: `npm run build && npm start`, or deploy to any host that runs Next.j
         PasswordField    password box with Show/Hide and "make a strong password"
         MusicPlayer      the "Play music" button in the header (set NEXT_PUBLIC_MUSIC_URL; use https:// on an https site)
     pages/               thin: each page is configuration plus these components
-    legacy/              the original prototype screens, kept for reference (not built)
 
 ## Rights
 
@@ -54,3 +54,9 @@ the API enforces every right and this only hides what you cannot use. To change 
 ## Not tested in a browser here
 
 The code passes syntax and undefined-name checks. Run `npm run dev` and click through each page once after installing.
+
+## Branding
+
+No company name or logo is hard-coded. Signed out, the site shows the product name (`PRODUCT` in `lib/pm.js`).
+Signed in, the header, sidebar, footer and browser tab show the company from `GET /api/me` (`organization.name`, `organization.logo_url`);
+`components/Brand.jsx` draws the logo, or the company's initials until an admin uploads one.

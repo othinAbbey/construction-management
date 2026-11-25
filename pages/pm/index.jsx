@@ -42,10 +42,11 @@ export default function Dashboard() {
 function Welcome({ me }) {
   return (
     <Shell title={`Welcome${me?.name ? `, ${me.name}` : ""}`}>
-      <div className="grid sm:grid-cols-3 gap-3 text-sm">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
         <Link href="/pm/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">Estimation and Tendering</b><div className="text-gray-300 mt-1">Upload a drawing PDF. Your files and results are saved to your account.</div></Link>
         <Link href="/pm/sourcing" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Material Supplier and Rates</b><div className="text-gray-500 mt-1">Compare supplier prices by district.</div></Link>
         <Link href="/pm/calculator" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Quantity Calculator</b><div className="text-gray-500 mt-1">Materials and cost for walls, slabs and concrete.</div></Link>
+        <Link href="/pm/subcontracts" className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 hover:bg-yellow-100"><b>Subcontracts Marketplace</b><div className="text-gray-600 mt-1">Find subcontracts and subcontractors from every company, or post your own.</div></Link>
       </div>
       <p className="text-sm text-gray-500">Missing a material, supplier or district? <Link href="/pm/contribute" className="underline">Suggest it</Link>.</p>
     </Shell>
@@ -69,7 +70,7 @@ function ProjectDashboard() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `canda-export-${today()}.json`;
+      link.download = `${(getUser()?.organization?.name || "workspace").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-export-${today()}.json`;
       document.body.append(link);
       link.click();
       link.remove();
@@ -102,10 +103,11 @@ function ProjectDashboard() {
           </div>
         )}
       </Panel>
-      <div className="grid sm:grid-cols-3 gap-3 text-sm">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
         <Link href="/pm/boq" className="bg-black text-white rounded-xl p-4 hover:bg-gray-900"><b className="text-yellow-400">BOQ Extraction</b><div className="text-gray-300 mt-1">Turn a drawing PDF into a bill of quantities.</div></Link>
         <Link href="/pm/calculator" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Quantity Calculator</b><div className="text-gray-500 mt-1">Materials and cost for walls, slabs and concrete.</div></Link>
         <Link href="/pm/sourcing" className="bg-white border rounded-xl p-4 hover:bg-gray-50"><b>Material Rates</b><div className="text-gray-500 mt-1">Compare supplier prices by district.</div></Link>
+        <Link href="/pm/subcontracts" className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 hover:bg-yellow-100"><b>Subcontracts Marketplace</b><div className="text-gray-600 mt-1">Find subcontracts and subcontractors from every company, or post your own.</div></Link>
       </div>
     </Shell>
   );
