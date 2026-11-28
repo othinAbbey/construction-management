@@ -7,7 +7,7 @@ import { Logo } from "../Brand";
 import Assistant from "./Assistant";
 import { api, can, getToken, getUser, setUser as setUserStore } from "../../lib/pm";
 
-/** [label, href, permission needed (optional)]. The server decides who has which permission; see /api/me. */
+/** [href, label, permission needed (optional), "platform" for Buildsuite360-staff-only pages]. The server decides who has which permission; see /api/me. */
 const NAV = [
   ["Overview", [["/pm", "Dashboard"], ["/pm/chat", "Site Chat", "chat:use"], ["/pm/summary", "Project Summary", "projects:read"]]],
   ["Projects", [["/pm/projects", "Projects", "projects:read"], ["/pm/tasks", "Tasks", "projects:read"], ["/pm/schedule", "Schedule", "projects:read"],
@@ -17,6 +17,7 @@ const NAV = [
     ["/pm/calculator", "Quantity Calculator", "catalog:read"], ["/pm/contribute", "Suggest Additions", "catalog:propose"]]],
   ["Estimating & business", [["/pm/boq", "BOQ Extraction", "boq:use"], ["/pm/tenders", "Tenders", "tenders:read"], ["/pm/company-tasks", "Company Tasks", "tasks:oversee"]]],
   ["Marketplace (all companies)", [["/pm/subcontracts", "Subcontracts", "market:read"]]],
+  ["Buildsuite360 team", [["/pm/social", "Adverts & Social Posts", null, "platform"]]],
   ["Administration", [["/pm/approvals", "Approvals", "proposals:review"], ["/pm/audit", "Audit Trail", "audit:read"], 
     ["/pm/company", "Company Settings", "users:manage"], ["/pm/roles", "Roles & Access", "roles:manage"], ["/pm/team", "Team & Security"], ["/pm/billing", "Plan & Billing", "billing:read"]]],
 ];
@@ -58,7 +59,7 @@ export function Shell({ title, children, error, actions }) {
         )}
         <nav className={`${menu ? "grid" : "hidden"} mt-3 grid-cols-2 gap-x-2 gap-y-3 md:mt-0 md:flex md:flex-col`}>
           {NAV.map(([group, items]) => {
-            const shown = items.filter(([, , need]) => !need || can(user, need) || user?.role === "admin");   // the Administrator sees every page
+            const shown = items.filter(([, , need, only]) => (only !== "platform" || user?.platform_team) && (!need || can(user, need) || user?.role === "admin"));   // the Administrator sees every page; "platform" pages are for Buildsuite360's own staff
             if (!shown.length) return null;
             return (
               <div key={group} className="col-span-2 md:block">
@@ -74,7 +75,7 @@ export function Shell({ title, children, error, actions }) {
           })}
         </nav>
         {user && <div className={`${menu ? "block" : "hidden"} md:block mt-6 px-3 text-xs text-gray-500 break-all`}>{user.name || user.email}<br />{user.role}</div>}
-        <div className="hidden md:block mt-2 px-3 text-[10px] text-gray-600">Build 2026-11-25e · sourcing bot</div>
+        <div className="hidden md:block mt-2 px-3 text-[10px] text-gray-600">Build 2026-11-28a · advert voice</div>
       </aside>
       <section className="flex-1 min-w-0 p-4 md:p-8 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">

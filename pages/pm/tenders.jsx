@@ -5,6 +5,7 @@ import { Btn, Card, Empty, Field, Form, Panel, Select, Shell } from "../../compo
 import { AiPill, BidPanel, ProgressCell, StageSteps, TaskDetail } from "../../components/pm/TaskProgress";
 import { addDays } from "../../lib/dates";
 import { api, can, getUser, money, useApi } from "../../lib/pm";
+import AdvertMaker, { tenderToNotice } from "../../components/pm/AdvertMaker";
 
 const COUNTRIES = ["Uganda", "Kenya", "Tanzania", "Rwanda", "South Sudan", "Democratic Republic of Congo", "Ethiopia", "Burundi"];
 const KEYWORDS = ["construction", "water", "borehole", "road", "building", "steel", "bridge", "rehabilitation", "supervision", "drainage"];
@@ -14,7 +15,7 @@ const STATUS = ["saved", "interested", "bidding", "submitted", "won", "lost", "d
 const STATUS_TONE = { saved: "bg-gray-100 text-gray-700", interested: "bg-blue-100 text-blue-800", bidding: "bg-yellow-100 text-yellow-800", submitted: "bg-purple-100 text-purple-800", won: "bg-green-100 text-green-800", lost: "bg-red-100 text-red-700", dismissed: "bg-gray-100 text-gray-400" };
 
 /**
- * Other places to find tenders. None of these offers a feed the app may read (World Bank, AfDB and, when configured, UNDP are
+ * Other places to find tenders. None of these offers a feed the app may read (World Bank, AfDB, UNDP and Uganda eGP are
  * searched directly by the API), so the page links to them and
  * "Add a tender from here" records what you find in the pipeline (tagged with the source). `free`: notices can be read without paying.
  */
@@ -142,9 +143,13 @@ function Search({ canWrite, onSaved }) {
     setF(first); run(1, first);
   }, [sources.data]); // eslint-disable-line react-hooks/exhaustive-deps
   const sourceName = (id) => sources.data?.find((s) => s.id === id)?.name || SITE_NAME[id] || id;
+  // Buildsuite360's own team can turn any notice into a social media advert in one click
+  const [owner, setOwner] = useState(false), [advert, setAdvert] = useState(null);
+  useEffect(() => { setOwner(!!getUser()?.platform_team); }, []);
 
   return (
     <div className="space-y-4">
+      {advert && <AdvertMaker notice={advert} onClose={() => setAdvert(null)} />}
       {(err || sources.error) && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">{err || sources.error}</div>}
       <Panel>
         <form onSubmit={(e) => { e.preventDefault(); run(1); }} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 items-end">
@@ -187,6 +192,7 @@ function Search({ canWrite, onSaved }) {
               </div>
               <div className="flex gap-2 items-center">
                 {t.url && <a href={t.url} target="_blank" rel="noreferrer" className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50">View notice &#8599;</a>}
+                {owner && <button onClick={() => setAdvert(tenderToNotice(t, sourceName(t.source)))} className="rounded-md border border-yellow-400 bg-yellow-50 px-3 py-1.5 text-sm font-medium hover:bg-yellow-100">Make advert</button>}
                 {t.pipeline_id ? <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_TONE[t.pipeline_status]}`}>In pipeline: {t.pipeline_status}</span>
                   : canWrite && <Btn onClick={() => save(t)}>Save to pipeline</Btn>}
               </div>

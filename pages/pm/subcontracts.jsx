@@ -69,7 +69,7 @@ const Area = ({ label, value, onChange, rows = 3, placeholder }) => (
 function ListingForm({ kind, listing, trades, locations, onClose, onSaved }) {
   const me = getUser() || {};
   const [v, setV] = useState(() => listing ? { ...listing } : { kind, title: "", trade: "", region: "", district: "", description: "", start_date: "", end_date: "", deadline: "",
-    value: "", currency: "UGX", crew_size: "", equipment: "", requirements: "", contact_name: me.name || "", contact_phone: "", contact_email: me.email || "" });
+    value: "", currency: "UGX", crew_size: "", equipment: "", requirements: "", contact_name: me.name || "", contact_phone: "", contact_email: me.email || "", feature_social: false });
   const [err, setErr] = useState(""), [busy, setBusy] = useState(false);
   const set = (k) => (x) => setV((p) => ({ ...p, [k]: x }));
   const regions = [...new Set(locations.map((l) => l.region))];
@@ -78,9 +78,10 @@ function ListingForm({ kind, listing, trades, locations, onClose, onSaved }) {
 
   async function save(e) {
     e.preventDefault(); setErr(""); setBusy(true);
-    const keys = ["title", "trade", "region", "district", "description", "start_date", "end_date", "value", "currency", "contact_name", "contact_phone", "contact_email",
+    const keys = ["title", "trade", "region", "district", "description", "start_date", "end_date", "value", "currency", "contact_name", "contact_phone", "contact_email", "feature_social",
       ...(sub ? ["deadline", "requirements"] : ["crew_size", "equipment"])];
     const body = Object.fromEntries(keys.map((k) => [k, v[k] === "" ? null : v[k]]));
+    body.feature_social = v.feature_social === true || v.feature_social === 1;
     try {
       const saved = listing ? await api(`/api/market/listings/${listing.id}`, { method: "PATCH", body }) : await api("/api/market/listings", { method: "POST", body: { ...body, kind } });
       onSaved(saved);
@@ -117,6 +118,11 @@ function ListingForm({ kind, listing, trades, locations, onClose, onSaved }) {
         <Field label="Contact person" value={v.contact_name || ""} onChange={set("contact_name")} />
         <Field label="Phone / WhatsApp" value={v.contact_phone || ""} onChange={set("contact_phone")} placeholder="e.g. 0772 123456" />
         <Field label="Email" type="email" value={v.contact_email || ""} onChange={set("contact_email")} />
+        <label className="sm:col-span-2 flex items-start gap-3 rounded-lg border bg-gray-50 p-3 text-sm cursor-pointer">
+          <input type="checkbox" className="mt-0.5 h-4 w-4" checked={v.feature_social === true || v.feature_social === 1} onChange={(e) => set("feature_social")(e.target.checked)} />
+          <span><b>Feature this on Buildsuite360's social media</b> (TikTok, WhatsApp Status, LinkedIn) so more companies see it.
+            <span className="block text-gray-600">We show the title, trade, place, value and {sub ? "apply-by date" : "team size"} only. Your phone, email and contact person are never shown: people reply here.</span></span>
+        </label>
         <div className="sm:col-span-2 flex justify-end gap-2 pt-2">
           <Btn type="button" kind="secondary" onClick={onClose}>Cancel</Btn>
           <Btn disabled={busy}>{busy ? "Saving..." : listing ? "Save changes" : "Publish"}</Btn>
